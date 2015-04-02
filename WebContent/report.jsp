@@ -17,8 +17,15 @@
     <body>
         <%
              	Controller m = new Controller();
-              	Office o = (Office) session.getAttribute("Office");
-             	session.setAttribute("Office", o);
+        		Office o = null;
+              	//Office o = (Office) session.getAttribute("Office");
+              	Cookie[] cookies = request.getCookies();
+                for(Cookie cookie:cookies){
+                    if(cookie.getName().equals("Office")){
+                       o = m.getOffice(Integer.parseInt(cookie.getValue()));
+                    }
+                }
+             	//session.setAttribute("Office", o);
               	ArrayList<Question> aQ = (ArrayList<Question>) session.getAttribute("Questions");
         %>
         <div class = "centerdiv">

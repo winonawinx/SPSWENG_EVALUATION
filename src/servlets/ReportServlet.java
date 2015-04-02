@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
+import Model.Office;
 
 /**
  * Servlet implementation class ReportServlet
@@ -41,6 +43,8 @@ public class ReportServlet extends HttpServlet {
 		Controller m = new Controller();
 		office = Integer.parseInt((String) request.getParameter("answer"));
 		request.getSession().setAttribute("Office", m.getOffice(office));
+		Cookie ofc = new Cookie("Office", String.valueOf(office));
+        response.addCookie(ofc);
 		request.getSession().setAttribute("Questions", m.getOfficeQuestions(office));
 		response.sendRedirect("report.jsp");
 	}

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
+import Model.Comment;
 import Model.ControlNumber;
 import Model.Form;
 
@@ -31,8 +32,10 @@ public class EvalServlet extends HttpServlet {
 		for(int x = 0; x < f.getQuestions().size(); x++)
 		{
 			m.addAnswer(f.getQuestions().get(x).getID(), controlnumber.getId(), Integer.parseInt((String)request.getParameter("answer"+x)), false);
-			m.updateControlNumber(new ControlNumber(controlnumber.getId(), controlnumber.getControlNumber(), f.getID(), controlnumber.getExpirationTime(), true));
 		}
+		
+		m.insertComment(new Comment(controlnumber.getId(), (String)request.getParameter("Text1")));
+		m.updateControlNumber(new ControlNumber(controlnumber.getId(), controlnumber.getControlNumber(), f.getID(), controlnumber.getExpirationTime(), true));
 	
 		response.sendRedirect("evaluatorlogin.jsp");
 	}

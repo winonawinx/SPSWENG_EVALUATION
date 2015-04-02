@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ public class ReportMenuServlet extends HttpServlet {
 		if(button.equals("comments"))
 		{
 			request.getSession().setAttribute("Services", con.getOfficeServices(((Office)request.getSession().getAttribute("Office")).getID()));
+			request.getSession().setAttribute("comments", con.getServiceComments(1));
 			response.sendRedirect("comments.jsp");
 		}
 	}

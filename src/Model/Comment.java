@@ -5,6 +5,12 @@ public class Comment
 	private int controlnumberid;
 	private String comment;
 	
+	public Comment(int Controlnumberid, String comment)
+	{
+		setControlnumberid(Controlnumberid);
+		setComment(comment);
+		
+	}
 	
 	public int getControlnumberid() {
 		return controlnumberid;

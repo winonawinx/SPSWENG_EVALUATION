@@ -1,3 +1,5 @@
+<%@page import="Controller.Controller"%>
+<%@page import="Model.Comment"%>
 <%@page import="Model.Service"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.Office"%>
@@ -18,8 +20,19 @@
     </head>
     <body>
         <%
-        	Office office = (Office) session.getAttribute("Office");
-        	Iterator services = (Iterator) session.getAttribute("Services");
+        Controller m = new Controller();
+        	//Office office = (Office) session.getAttribute("Office");
+	      Office office = null;
+        	Cookie[] cookies = request.getCookies();
+	       for(Cookie cookie:cookies){
+	           if(cookie.getName().equals("Office")){
+	              office = m.getOffice(Integer.parseInt(cookie.getValue()));
+	           }
+	       }
+	     	//session.setAttribute("Office", office);
+        	Iterator services = m.getOfficeServices(office.getID());
+        	session.setAttribute("Services", services);
+        	Iterator comments = (Iterator) session.getAttribute("comments");
         %>
         <div class="centerdiv">
             <h1 class="headerlabel">View Comments
@@ -29,6 +42,7 @@
             </h1>
             <div class="actualcontent">
                 <div class="row">
+                <form action = "CommentServlet" method = "post">  
                     <div id="serviceslistdiv" class="col-xs-3">
                         <ul id="serviceslist">
                             <%
@@ -37,26 +51,27 @@
                         			Service service = (Service)services.next();
                         	%>
                             <li>
-                                <button type = "submit" name = "<%=service.getID()%>" id = "<%=service.getID()%>" value = "<%=service.getID()%>"><%=service.getName() %></button>
+                                <button type = "submit" name = "<%=service.getID()%>" id = "<%=service.getID()%>" value = "<%=service.getID()%>" onClick = "clicked(this);"><%=service.getName() %></button>
                             </li>
                             <%
                             }
                             %>
-                        	<input type = "hidden" name = "click" id = "click">
+                        	<input type = "hidden" id = "click" name = "click">
                         </ul>
                     </div>
+                 </form>
                     <div class="col-xs-9">
                         <div id="displayserviceslabel">
                             <h5>Displaying 1-5 out of 69 comments</h5>
                         </div>
                         <div id="commentsdiv">
                             <ul id="comments">
-                                <li>Stupid Service</li>
-                                <li>Stupid Service</li>
-                                <li>Stupid Service</li>
-                                <li>Stupid Service</li>
-                                <li>Stupid Service</li>
-                                <li>Stupid Service</li>
+                            	<% while(comments.hasNext())
+                            		{	
+                            			Comment comment = (Comment) comments.next();
+                            	%>
+                                <li><%=comment.getComment() %></li>
+                                <%} %>
                             </ul>
                         </div>
                         <div id="page-selection"></div>
@@ -78,4 +93,13 @@
              $("#comments").html("Insert content"); // some ajax content loading...
         });
     </script>
+    
+                
+        <script>
+        	function clicked(element)
+        	{
+        		var pressedBtn = element.id;
+         		document.getElementById("click").value = document.getElementById(pressedBtn).value;
+        	}
+        </script>
 </html>

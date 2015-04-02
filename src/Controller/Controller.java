@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import Model.Answer;
+import Model.Comment;
 import Model.ControlNumber;
 import Model.Form;
 import Model.Office;
@@ -15,6 +16,7 @@ import Model.Question;
 import Model.Service;
 import Model.User;
 import Model.DB.AnswerManager;
+import Model.DB.CommentManager;
 import Model.DB.ControlNumManager;
 import Model.DB.FormManager;
 import Model.DB.OfficeManager;
@@ -31,6 +33,7 @@ public class Controller {
 	private ControlNumManager cm;
 	private QuestionManager qm;
 	private ServiceManager sm;
+	private CommentManager cmm;
 	
 	public Controller()
 	{
@@ -41,6 +44,7 @@ public class Controller {
 		cm = new ControlNumManager();
 		qm = new QuestionManager();
 		sm = new ServiceManager();
+		cmm = new CommentManager();
 		
 		getAllData();
 	}
@@ -221,5 +225,25 @@ public class Controller {
 	public Iterator<Service> getOfficeServices(int officeid)
 	{
 		return sm.getOfficeServices(officeid);
+	}
+	
+	public Iterator<Comment> getAllComments()
+	{
+		return cmm.getAllData();
+	}
+	
+	public Iterator<Comment> getAllComments(int controlNumberid)
+	{
+		return cmm.getControlComments(controlNumberid);
+	}
+	
+	public void insertComment(Comment comment)
+	{
+		cmm.insertData(comment);
+	}
+	
+	public Iterator<Comment> getServiceComments(int serviceid)
+	{
+		return cmm.getServiceComments(serviceid);
 	}
 }
