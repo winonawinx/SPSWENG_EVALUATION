@@ -123,7 +123,8 @@ CREATE TABLE `formquestions` (
 
 LOCK TABLES `formquestions` WRITE;
 /*!40000 ALTER TABLE `formquestions` DISABLE KEYS */;
-INSERT INTO `formquestions` VALUES (1,1,1,0),(1,2,2,0),(1,3,3,0),(1,4,4,0),(1,5,5,0);
+INSERT INTO `formquestions` VALUES (1,1,1,0),(1,2,2,0),(1,3,3,0),(1,4,4,0),(1,5,5,0),
+(2, 1, 1, 0), (2, 2, 2, 0), (2, 3, 3, 0), (3, 1, 1, 0), (3, 3, 2, 0), (3, 6, 3, 0);
 /*!40000 ALTER TABLE `formquestions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +153,8 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,1,'2015-03-29','2016-03-29',0);
+INSERT INTO `forms` VALUES (1,1,'2015-03-29','2016-03-29',0), ('2', '2', '2015-04-02', '2016-04-02', '0'),
+('3', '3', '2015-04-02', '2016-04-02', '0');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +184,7 @@ LOCK TABLES `offices` WRITE;
 /*!40000 ALTER TABLE `offices` DISABLE KEYS */;
 INSERT INTO `offices` VALUES
 (1,'Building and Grounds Maintenance Office',1,0),
-(2,'Civil and Saniary Works Office',1,0),
+(2,'Civil and Sanitary Works Office',1,0),
 (3,'Mechanical and Electrical Works Office',1, 0),
 (4,'Facilities Management Office (STC)',1,0),
 (5,'Enrolment Services Hub',1,0),
