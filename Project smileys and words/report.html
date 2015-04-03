@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <script src="jquery-2.1.3.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <title>View Reports</title>
+    </head>
+    <body>
+        
+        <!-- Modal HTML -->
+        <div id="filterModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Filter Results</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <label class="col-xs-12 addlabel control-label">From Date </label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group control-group">
+                            <label class="col-xs-12 addlabel control-label">To Date </label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" onClick="">OK</button>
+                            <button type="button" class="blackbtn" data-dismiss="modal">Cancel</button>    
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="centerdiv">
+            <h1 class="headerlabel">Enrollment Services Hub Report
+                <div class="floatright headermenu">
+                    <a href="viewoffices.html" type="button" class="blackbtn abtn headermenubtn">Back</a>
+                </div>
+            </h1>
+            <div class="actualcontent">
+                <table class="table" id="report">
+                    <thead>
+                        <tr>
+                            <th>Items</th>
+                            <th>Service 1</th>
+                            <th>Service 2</th>
+                            <th>Service 3</th>
+                            <th>Service 4</th>
+                            <th>Service 5</th>
+                            <th>Service 6</th>
+                            <th>Service 7</th>
+                            <th>Service 8</th>
+                            <th>Service 9</th>
+                            <th>Service 10</th>
+                            <th>Service 11</th>
+                            <th>Service 12</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            <tr>
+                                <td>Personnel</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Processes / Procedures</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Signages and Communication Materials</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Facilities</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Overall Satisfaction</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Average</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                  </table>
+            </div>
+            <div id="reportbtns">
+                <a href="#filterModal" class="blackbtn reportbtn" data-toggle="modal">Filter Results</a>
+                <a href="" class="blackbtn reportbtn">View Comments</a>
+                <a href="" class="blackbtn reportbtn">Export to Spreadsheet</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <script src="jquery-2.1.3.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <title>Evaluate a Service</title>
+    </head>
+    <body>
+        
+        <!-- Modal HTML -->
+        <div id="confirmationModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Confirmation</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="col-xs-4">
+                            <img src="images/check-mark.gif" height="140" width="160"/>
+                        </div>
+                        <div class="col-xs-8">
+                            <p><h3>Are you sure you want to submit this form?</h3></p>
+                            <p><h5>You will no longer be able to change your answer after you submit.</h5></p>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" onClick="">Yes</button>
+                            <button type="button" class="blackbtn" data-dismiss="modal">No</button>    
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="centerdiv">
+            <h1 class="headerlabel">ESH - Request for Documents Evaluation</h1>
+            <div id="evaluationformdiv" class="contentdiv">
+                <ol>                            <!-- INSERT THIS TAG (SPAN) IF AN ITEM HAS NO ANSWER -->
+                    <li class="evalquestion"><h2>Personnel<span class="no-answer">*</span></h2>
+                        <div class="evalbtnsdiv floatright">
+                            <button type="button" class="evalquesbtn sadbtn" id="sad0" onclick="press(this);" value="1"><img src="images/Frowny%20donut.png"/>Sad</button>
+                            <button type="button" class="evalquesbtn neutralbtn" id="neutral0" onclick="press(this);" value="2"><img src="images/Neutral%20Donut.png"/>Neutral</button>
+                            <button type="button" class="evalquesbtn happybtn" id="happy0" onclick="press(this);" value="3"><img src="images/Happy%20donut.png"/>Happy</button>
+                            <button type="button" class="evalquesbtn nabtn" id="na0" onclick="press(this);" value="0"><img src="images/Dead%20Smiley.png"/>N/A</button>
+                        </div>    
+                        <div class="clearfloat"></div>
+                    </li>
+                    <li class="evalquestion"><h2>Processes / Procedures</h2>
+                        <div class="evalbtnsdiv floatright">
+                            <button type="button" class="evalquesbtn sadbtn" id="sad0" onclick="press(this);" value="1"><img src="images/Frowny%20donut.png"/>Sad</button>
+                            <button type="button" class="evalquesbtn neutralbtn" id="neutral0" onclick="press(this);" value="2"><img src="images/Neutral%20Donut.png"/>Neutral</button>
+                            <button type="button" class="evalquesbtn happybtn" id="happy0" onclick="press(this);" value="3"><img src="images/Happy%20donut.png"/>Happy</button>
+                            <button type="button" class="evalquesbtn nabtn" id="na0" onclick="press(this);" value="0"><img src="images/Dead%20Smiley.png"/>N/A</button>
+                        </div>    
+                        <div class="clearfloat"></div>
+                    </li>
+                    <li class="evalquestion"><h2>Signages and Communication Materials</h2>
+                        <div class="evalbtnsdiv floatright">
+                            <button type="button" class="evalquesbtn sadbtn" id="sad0" onclick="press(this);" value="1"><img src="images/Frowny%20donut.png"/>Sad</button>
+                            <button type="button" class="evalquesbtn neutralbtn" id="neutral0" onclick="press(this);" value="2"><img src="images/Neutral%20Donut.png"/>Neutral</button>
+                            <button type="button" class="evalquesbtn happybtn" id="happy0" onclick="press(this);" value="3"><img src="images/Happy%20donut.png"/>Happy</button>
+                            <button type="button" class="evalquesbtn nabtn" id="na0" onclick="press(this);" value="0"><img src="images/Dead%20Smiley.png"/>N/A</button>
+                        </div>    
+                        <div class="clearfloat"></div>
+                    </li>
+                    <li class="evalquestion"><h2>Overall Satisfaction</h2>
+                        <div class="evalbtnsdiv floatright">
+                            <button type="button" class="evalquesbtn sadbtn" id="sad0" onclick="press(this);" value="1"><img src="images/Frowny%20donut.png"/>Sad</button>
+                            <button type="button" class="evalquesbtn neutralbtn" id="neutral0" onclick="press(this);" value="2"><img src="images/Neutral%20Donut.png"/>Neutral</button>
+                            <button type="button" class="evalquesbtn happybtn" id="happy0" onclick="press(this);" value="3"><img src="images/Happy%20donut.png"/>Happy</button>
+                            <button type="button" class="evalquesbtn nabtn" id="na0" onclick="press(this);" value="0"><img src="images/Dead%20Smiley.png"/>N/A</button>
+                        </div>    
+                        <div class="clearfloat"></div>
+                    </li>
+				<form>
+                    <div  id="commentbox">
+                        <!--<h2 class="evalquestion">Comments </h2> -->
+                        <textarea name="Text1" cols="63" rows="6" placeholder="Comments"  ></textarea>
+                        <div align="right">
+                            <a href="#confirmationModal" id ="submit" class="blackbtn" style ="font-size: 25px; margin-right: 130px;" data-toggle="modal">Submit</a>
+                        </div>
+                    </div>
+				</form>
+                </ol>		
+
+            </div>
+        </div>
+    <script type="text/javascript">
+        function press(element)
+        {
+            var pressedBtn = element.id;
+            var lastChar = pressedBtn.charAt(pressedBtn.length-1);
+            document.getElementById("sad"+lastChar).disabled = false;
+            document.getElementById("neutral"+lastChar).disabled = false;
+            document.getElementById("happy"+lastChar).disabled = false;
+            document.getElementById("na"+lastChar).disabled = false;
+            document.getElementById(pressedBtn).disabled = true;
+            //document.getElementById("answer"+lastChar).value = document.getElementById(pressedBtn).value;
+        }
+        $(document).ready(function(){
+            $(".btn").click(function(){
+                $("#confirmationModal").modal('show');
+            });
+        });
+    </script>
+
+    </body>
+</html>
