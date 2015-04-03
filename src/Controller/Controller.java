@@ -156,6 +156,11 @@ public class Controller {
 		return om.getData(officeID);
 	}
 	
+	public Office getOfficeByName(String officeName)
+	{
+		return om.getDataByName(officeName);
+	}
+	
 	public User getUser(String email, String password)
 	{
 		ArrayList<User> users = getAllUsers();
@@ -245,5 +250,10 @@ public class Controller {
 	public Iterator<Comment> getServiceComments(int serviceid)
 	{
 		return cmm.getServiceComments(serviceid);
+	}
+	
+	public int getFormID(int serviceID)
+	{
+		return fm.getFormId(serviceID);
 	}
 }

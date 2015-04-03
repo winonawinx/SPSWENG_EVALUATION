@@ -164,7 +164,6 @@ public class QuestionManager
 			while(rs.next())
 			{
 				Question q = new Question(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				System.out.println(q.getQuestion());
 				list.add(q);			
 			}
 						

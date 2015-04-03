@@ -93,6 +93,37 @@ private static OfficeManager oM = null;
 		return null;
 	}
 	
+	public Office getDataByName(String ID)
+	{
+		try
+		{
+			Office o;
+			
+			String query = "SELECT * FROM Offices WHERE officeName = ?";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, ID);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				o.setServices(sm.getAllData(ID));
+				return o;
+			}
+			
+			else 
+				return null;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT Office");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return null;
+	}
+	
 	public ArrayList<Office> getAllData() 
 	{	
 		try 
@@ -105,7 +136,6 @@ private static OfficeManager oM = null;
 			while(rs.next())
 			{
 				Office o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
-				System.out.println("Office Name " + o.getName());
 				o.setServices(sm.getAllData(o.getID()));
 				offices.add(o);			
 			}

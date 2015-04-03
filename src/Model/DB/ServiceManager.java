@@ -91,6 +91,32 @@ public class ServiceManager
 		return ss;
 	}
 	
+	public ArrayList<Service> getAllData(String officeID) 
+	{	
+		ArrayList<Service> ss = new ArrayList<Service>();
+		try 
+		{
+			String query = "SELECT * FROM Services where officeID = (SELECT officeID FROM offices WHERE officeName = ?)";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, officeID);
+			rs = statement.executeQuery();
+			
+			
+			while(rs.next())
+			{
+				Service s = new Service(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				ss.add(s);			
+			}
+						
+		} 
+		catch (SQLException e) {
+			System.out.println("ERROR in getting all services from DB");
+			e.printStackTrace();
+		}
+		connect.close();
+		return ss;
+	}
+	
 	public ArrayList<Service> getAllData() 
 	{	
 		try 

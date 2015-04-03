@@ -18,14 +18,17 @@
     %>
     
     <body>
-    	<form action = "ReportServlet" method = "post">
         <div class="centerdiv">
+        <form action = "OfficesMenuServlet" method = "post">
             <h1 class="headerlabel">View Offices
                 <div class="floatright headermenu">
-                    <a href="editoffices.html" type="button" class="blackbtn abtn headermenubtn">Edit</a>
-                    <a href="adminmenu.jsp" type="button" class="blackbtn abtn headermenubtn">Back</a>
+                    <button type="submit" class="blackbtn abtn headermenubtn" id = "Editbtn" name = "Editbtn" value = "Edit" onClick = "menu(this);">Edit</button>
+                    <button type="submit" class="blackbtn abtn headermenubtn" value = "Back">Back</button>
+                    <input type = "hidden" name = "pindot" id = "pindot">
                 </div>
             </h1>
+            </form>
+            <form action = "ReportServlet" method = "post">
             <div class="contentdiv">
                 <div class="row">
                    
@@ -40,14 +43,20 @@
                 </div>
                 <input type = "hidden" id = "answer" name = "answer" value = "0">
             </div>
+                  </form>
         </div>
-        </form>
+  
         
         <script>
         	function clicked(element)
         	{
         		var pressedBtn = element.id;
          		document.getElementById("answer").value = document.getElementById(pressedBtn).value;
+        	}
+        	function menu(element)
+        	{
+        		var pressedBtn = element.id;
+         		document.getElementById("pindot").value = document.getElementById(pressedBtn).value;
         	}
         </script>
         
