@@ -247,4 +247,36 @@ public class ServiceManager
 		return services.iterator();
 	}
 	
+	
+	public int getServiceID(String service, int officeID)
+	{
+		try
+		{
+			int id = -1;
+			
+			String query = "SELECT serviceid FROM services WHERE serviceName = ? AND officeID = ?;";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, service);
+			statement.setInt(2, officeID);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				id = rs.getInt(1);
+				return id;
+			}
+			
+			else 
+				return -1;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT Service");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return -1;
+	}
+	
 }

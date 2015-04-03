@@ -74,8 +74,8 @@
                 
                     <li id="<%=form.getQuestions().get(x).getID()%>">
                         <div class="form-group">
-                            <input type="text" class="form-control" value= "<%=form.getQuestions().get(x).getID()%>">
-                            <button class="floatright deletequestionbtn" onClick="deleteQuestion('question0');"><img src="css/images/x-mark.png" height="20" width="20"></button>
+                            <input type="text" class="form-control" id = "<%=form.getQuestions().get(x).getQuestion()%>" name = "<%=form.getQuestions().get(x).getQuestion()%>" value= "<%=form.getQuestions().get(x).getQuestion()%>">
+                            <button class="floatright deletequestionbtn" onClick="deleteQuestion(<%=form.getQuestions().get(x).getID()%>);"><img src="css/images/x-mark.png" height="20" width="20"></button>
                         </div>
                     </li>
                     <%} %>

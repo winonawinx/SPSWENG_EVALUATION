@@ -69,7 +69,7 @@ public class QuestionManager
 	{	
 		try 
 		{
-			String query = "SELECT * FROM Questions";
+			String query = "SELECT * FROM Questions WHERE isArchived = '0'";
 			statement = connect.getConnection().prepareStatement(query);
 			rs = statement.executeQuery();
 			
@@ -155,7 +155,7 @@ public class QuestionManager
 		
 		try 
 		{
-			String query = "SELECT * FROM Questions WHERE questionID IN (Select questionID FROM formquestions WHERE FormID IN (SELECT FormID from Forms WHERE serviceID IN (select serviceID from services Where officeID = ?)))";
+			String query = "SELECT * FROM Questions WHERE isArchived = '0' AND questionID IN (Select questionID FROM formquestions WHERE FormID IN (SELECT FormID from Forms WHERE serviceID IN (select serviceID from services Where officeID = ?)))";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, officeid);
 			rs = statement.executeQuery();

@@ -256,4 +256,10 @@ public class Controller {
 	{
 		return fm.getFormId(serviceID);
 	}
+	
+	public int getServiceID(String service, int officeID)
+	{
+		return sm.getServiceID(service, officeID);
+	}
+	
 }

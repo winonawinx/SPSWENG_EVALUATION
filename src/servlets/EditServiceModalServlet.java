@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Controller.Controller;
+import Model.Office;
+
 @WebServlet("/EditServiceModalServlet")
 public class EditServiceModalServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,12 +28,25 @@ public class EditServiceModalServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		Controller controller = new Controller();
 		String clicked = (String) request.getParameter("mhidden");
-		String service = (String) request.getParameter("click");
+		String service = (String) request.getParameter("serviceName");
+		System.out.println("In Edit Service Modal Servlet == " + service);
 		
 		if(clicked.equals("Edit Form"))
 		{
-			response.addCookie(new Cookie("Service", service));
+			Office office = null;
+	    	Cookie[] cookies = request.getCookies();
+	        for(Cookie cookie:cookies){
+	           if(cookie.getName().equals("Office")){
+	        	   System.out.println("Cookie is " + cookie.getValue());
+	              office = controller.getOfficeByName(cookie.getValue());
+	           }
+	       }
+	        
+			
+			
+			response.addCookie(new Cookie("Service", String.valueOf(controller.getServiceID(service, office.getID()))));
 			response.sendRedirect("modifyquestions.jsp");
 		}	
 		
