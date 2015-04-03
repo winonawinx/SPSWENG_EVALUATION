@@ -19,26 +19,16 @@ import Model.Office;
 public class ReportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	int office = 0;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    
     public ReportServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Controller m = new Controller();
-		request.getSession().setAttribute("Offices", m.getAllOffices());
-		response.sendRedirect("Offices.jsp");
+	
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Controller m = new Controller();
 		office = Integer.parseInt((String) request.getParameter("answer"));

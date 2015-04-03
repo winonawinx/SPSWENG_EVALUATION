@@ -65,7 +65,7 @@ public class AnswerManager{
 		return null;
 	}
 	
-	public ArrayList<Answer> getAllData() 
+	public Iterator<Answer> getAllData() 
 	{	
 		try 
 		{
@@ -86,7 +86,7 @@ public class AnswerManager{
 			e.printStackTrace();
 		}
 		connect.close();
-		return answers;
+		return answers.iterator();
 	}
 	
 	public boolean updateData(Object obj) 

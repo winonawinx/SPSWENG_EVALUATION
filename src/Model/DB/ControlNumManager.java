@@ -68,7 +68,7 @@ public class ControlNumManager {
 		return null;
 	}
 	
-	public ArrayList<ControlNumber> getAllData() 
+	public Iterator<ControlNumber> getAllData() 
 	{	
 		try 
 		{
@@ -89,7 +89,7 @@ public class ControlNumManager {
 			e.printStackTrace();
 		}
 		connect.close();
-		return controlnumbers;
+		return controlnumbers.iterator();
 	}
 	
 	public Boolean controlNumberIsValid(String controlnumber)

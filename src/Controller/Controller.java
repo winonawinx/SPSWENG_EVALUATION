@@ -59,7 +59,7 @@ public class Controller {
 		um.insertData(email, username, password, type, title);
 	}
 	
-	public ArrayList<Office> getAllOffices()
+	public Iterator<Office> getAllOffices()
 	{
 		return om.getAllData();
 	}
@@ -69,7 +69,7 @@ public class Controller {
 		om.insertData(new Office(ID, name, head, isArchived));
 	}
 	
-	public ArrayList<Answer> getAllAnswers()
+	public Iterator<Answer> getAllAnswers()
 	{
 		return am.getAllData();
 	}
@@ -79,11 +79,12 @@ public class Controller {
 		am.insertData(new Answer(questionID, controlnumber, answer, isArchived));
 	}
 	
-	public boolean controlNumIsExpired(String cn) {
+	public boolean controlNumIsExpired(String cn)
+	{
 		return cm.controlNumIsExpired(cn);
 	}
 	
-	public ArrayList<Form> getAllForms()
+	public Iterator<Form> getAllForms()
 	{
 		return fm.getAllData();
 	}
@@ -93,7 +94,7 @@ public class Controller {
 		fm.insertData(new Form(ID, service, startDate, endDate, isArchived));
 	}
 	
-	public ArrayList<ControlNumber> getAllControlNumbers()
+	public Iterator<ControlNumber> getAllControlNumbers()
 	{
 		return cm.getAllData();
 	}
@@ -103,7 +104,7 @@ public class Controller {
 		cm.insertData(new ControlNumber(id, controlNumber, form, expirationTime, status));
 	}
 	
-	public ArrayList<Question> getAllQuestions()
+	public Iterator<Question> getAllQuestions()
 	{
 		return qm.getAllData();
 	}
@@ -113,7 +114,7 @@ public class Controller {
 		qm.insertData(new Question(ID, question, isArchived));
 	}
 	
-	public ArrayList<Service> getAllServices(int officeID)
+	public Iterator<Service> getAllServices(int officeID)
 	{
 		return sm.getAllData(officeID);
 	}
@@ -146,7 +147,7 @@ public class Controller {
 	}
 	
 	
-	public ArrayList<Question> getOfficeQuestions(int officeid)
+	public Iterator<Question> getOfficeQuestions(int officeid)
 	{
 		return qm.getOfficeQuestions(officeid);
 	}

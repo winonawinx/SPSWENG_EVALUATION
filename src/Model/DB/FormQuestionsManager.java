@@ -34,7 +34,7 @@ public class FormQuestionsManager
 		questions = new ArrayList<Question>();
 	}
 	
-	public ArrayList<Question> getAllData(int formID) 
+	public Iterator<Question> getAllData(int formID) 
 	{	
 		try 
 		{
@@ -55,11 +55,11 @@ public class FormQuestionsManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return questions;
+		return questions.iterator();
 	}
 	
-	public ArrayList<Question> getList()
+	public Iterator<Question> getList()
 	{
-		return (ArrayList<Question>) questions.clone();
+		return questions.iterator();
 	}
 }

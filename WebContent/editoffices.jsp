@@ -17,7 +17,7 @@
     <body>
         <%
         	Controller con = new Controller();
-        	ArrayList<Office> offices = con.getAllOffices();
+        	Iterator<Office> offices = con.getAllOffices();
         %>
         <!-- Modal HTML -->
         <form action = "EditOfficeModalServlet" method = "post">
@@ -59,11 +59,12 @@
                 <div class="row">
  
  					<%
- 						for(int i = 0; i < offices.size(); i++)
+ 						while(offices.hasNext())
  						{
+ 							Office office = offices.next();
  					%>
                     <div class="col-xs-4">
-                        <button type = "submit" class="blackbtn viewabtn view" name = "<%=offices.get(i).getName()%>" id = "<%=offices.get(i).getName()%>" value = "<%=offices.get(i).getName()%>" onclick = "press(this);"><%=offices.get(i).getName() %></button>
+                        <button type = "submit" class="blackbtn viewabtn view" name = "<%=office.getName()%>" id = "<%=office.getName()%>" value = "<%=office.getName()%>" onclick = "press(this);"><%=office.getName() %></button>
                     </div>
  					<%} %>
                     <div class="col-xs-4">

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import DBConnection.DBConnection;
 import Model.Form;
 import Model.Office;
+import Model.Question;
 import Model.Service;
 import Model.User;
 
@@ -38,25 +39,28 @@ public class FormManager
 		fqm = new FormQuestionsManager();
 	}
 	
-	//public Form getDatas(String OfficeName, String ServiceName)
 	public Form getData(int formID)
 	{
 		try
 		{
 			Form c;
 
-			//String query = "SELECT * FROM forms WHERE (SELECT serviceID from Services WHERE serviceName = ? AND officeID = (SELECT officeID from offices where officeName = ?)) = serviceID;";
 			String query = "SELECT * FROM forms WHERE formID = ?;";	
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, formID);
-			//statement.setString(1, ServiceName);
-			//statement.setString(2, OfficeName);
 			rs = statement.executeQuery();
 			
 			if (rs.next())
 			{
+				ArrayList<Question> questions = new ArrayList<Question>();
+				Iterator iterator = null;
 				Form f = new Form(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getDate(4), rs.getBoolean(5));
-				f.setQuestions(fqm.getAllData(f.getID()));
+				iterator = fqm.getAllData(f.getID());
+				while(iterator.hasNext())
+				{
+					questions.add((Question)iterator.next());
+				}
+				f.setQuestions(questions);
 				return f;
 			}
 			
@@ -74,7 +78,7 @@ public class FormManager
 		return null;
 	}
 	
-	public ArrayList<Form> getAllData() 
+	public Iterator<Form> getAllData() 
 	{	
 		try 
 		{
@@ -83,10 +87,19 @@ public class FormManager
 			rs = statement.executeQuery();
 			
 			forms = new ArrayList<Form>();
+			
 			while(rs.next())
 			{
+				ArrayList<Question> questions = new ArrayList<Question>();
+				Iterator iterator = null;
+				
 				Form f = new Form(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getDate(4), rs.getBoolean(5));
-				f.setQuestions(fqm.getAllData(f.getID()));
+				iterator = fqm.getAllData(f.getID());
+				while(iterator.hasNext())
+				{
+					questions.add((Question)iterator.next());
+				}
+				f.setQuestions(questions);
 				forms.add(f);
 			}
 			
@@ -97,7 +110,7 @@ public class FormManager
 		}
 		connect.close();
 		System.out.println(forms.get(0).getQuestions().size());
-		return forms;
+		return forms.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
@@ -191,8 +204,16 @@ public class FormManager
 			
 			if(rs.next())
 			{
+				ArrayList<Question> questions = new ArrayList<Question>();
+				Iterator iterator = null;
+				
 				form = new Form(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getDate(4), rs.getBoolean(5));
-				form.setQuestions(fqm.getAllData(form.getID()));
+				iterator = fqm.getAllData(form.getID());
+				while(iterator.hasNext())
+				{
+					questions.add((Question)iterator.next());
+				}
+				form.setQuestions(questions);
 				return form;
 			}
 			

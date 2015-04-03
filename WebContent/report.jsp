@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page import="Controller.Controller"%>
 <%@page import="Model.Question"%>
 <%@page import="java.util.ArrayList"%>
@@ -26,7 +27,7 @@
                     }
                 }
              	//session.setAttribute("Office", o);
-              	ArrayList<Question> aQ = (ArrayList<Question>) session.getAttribute("Questions");
+              	Iterator<Question> aQ = (Iterator<Question>) session.getAttribute("Questions");
         %>
         <div class = "centerdiv">
             <h1 class="headerlabel"><%=o.getName()%> Report</h1>
@@ -37,7 +38,7 @@
 	                        <th>Items</th>
                         <%
                         	int serviceSize = o.getServices().size();
-                        	int questionSize = aQ.size();
+                        	int questionSize = 0;
                         	float[] total = new float[serviceSize];
                         	for(int x = 0 ; x < serviceSize; x++)
                         	{
@@ -50,15 +51,17 @@
                     </thead>
                         <tbody>
                         	<%
-                            	for(int x = 0; x < questionSize; x++)
+                            	while(aQ.hasNext())
                             	{
+                            		questionSize++;
+                            		Question question = aQ.next();
                             %>
                             <tr>
-                                <td><%=aQ.get(x).getQuestion() %></td>
+                                <td><%=question.getQuestion() %></td>
                                 <%
                                 	for(int y = 0; y < serviceSize; y++)
                                 	{
-                                		float average = m.getAVG(aQ.get(x).getID(), o.getServices().get(y).getID());
+                                		float average = m.getAVG(question.getID(), o.getServices().get(y).getID());
                                 		total[y] += average;
                               	%>
                                 <td><%= average %></td>

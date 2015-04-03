@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page import="Model.DB.OfficeManager"%>
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
@@ -57,8 +58,13 @@
     	<%
 			OfficeManager of = new OfficeManager();
 			ArrayList<Service> services = new ArrayList<Service>();
-			ArrayList<Office> offices = new ArrayList<Office>();	
-			offices = of.getAllData();
+			Iterator<Office> iterator = of.getAllData();
+			ArrayList<Office> offices = new ArrayList<Office>();
+			while(iterator.hasNext())
+			{
+				offices.add((Office)iterator.next());
+			}
+			
 			services = offices.get(0).getServices();
 		%>  
 		<form action = "generateControlNumServlet" method = "post">

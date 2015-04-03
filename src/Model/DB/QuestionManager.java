@@ -65,7 +65,7 @@ public class QuestionManager
 		return null;
 	}
 	
-	public ArrayList<Question> getAllData() 
+	public Iterator<Question> getAllData() 
 	{	
 		try 
 		{
@@ -86,7 +86,7 @@ public class QuestionManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return questions;
+		return questions.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
@@ -149,7 +149,7 @@ public class QuestionManager
 	}
 	
 	
-	public ArrayList<Question> getOfficeQuestions(int officeid)
+	public Iterator<Question> getOfficeQuestions(int officeid)
 	{
 		ArrayList<Question> list = new ArrayList<Question>();
 		
@@ -173,7 +173,7 @@ public class QuestionManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return list;
+		return list.iterator();
 		
 	}
 }

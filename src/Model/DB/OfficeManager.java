@@ -75,8 +75,15 @@ private static OfficeManager oM = null;
 			
 			if (rs.next())
 			{
+				ArrayList<Service> services = new ArrayList<Service>();
+				Iterator iterator = null;
 				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
-				o.setServices(sm.getAllData(ID));
+				iterator = sm.getAllData(ID);
+				while(iterator.hasNext())
+				{
+					services.add((Service)iterator.next());
+				}
+				o.setServices(services);
 				return o;
 			}
 			
@@ -99,6 +106,7 @@ private static OfficeManager oM = null;
 		{
 			Office o;
 			
+			
 			String query = "SELECT * FROM Offices WHERE officeName = ?";	
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setString(1, ID);
@@ -106,8 +114,15 @@ private static OfficeManager oM = null;
 			
 			if (rs.next())
 			{
+				ArrayList<Service> services = new ArrayList<Service>();
+				Iterator iterator = null;
 				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
-				o.setServices(sm.getAllData(ID));
+				iterator = sm.getAllData(ID);
+				while(iterator.hasNext())
+				{
+					services.add((Service)iterator.next());
+				}
+				o.setServices(services);
 				return o;
 			}
 			
@@ -124,19 +139,26 @@ private static OfficeManager oM = null;
 		return null;
 	}
 	
-	public ArrayList<Office> getAllData() 
+	public Iterator<Office> getAllData() 
 	{	
 		try 
 		{
-			String query = "SELECT * FROM Offices";
+			String query = "SELECT * FROM Offices where isArchived = '0'";
 			statement = connect.getConnection().prepareStatement(query);
 			rs = statement.executeQuery();
 			
 			offices = new ArrayList<Office>();
 			while(rs.next())
 			{
+				ArrayList<Service> services = new ArrayList<Service>();
+				Iterator iterator = null;
 				Office o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
-				o.setServices(sm.getAllData(o.getID()));
+				iterator = sm.getAllData(o.getID());
+				while(iterator.hasNext())
+				{
+					services.add((Service)iterator.next());
+				}
+				o.setServices(services);
 				offices.add(o);			
 			}
 						
@@ -146,7 +168,7 @@ private static OfficeManager oM = null;
 			e.printStackTrace();
 		}
 		connect.close();
-		return offices;
+		return offices.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
