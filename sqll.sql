@@ -80,10 +80,13 @@ CREATE TABLE `controlnumbers` (
   `controlNumberId` int(11) NOT NULL AUTO_INCREMENT,
   `controlNumber` char(10) NOT NULL,
   `formId` int(11) NOT NULL,
+  `serviceId` int(11) NOT NULL,
   `expirationTime` datetime(6) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`controlNumberId`),
   KEY `controlNumbersFormId_idx` (`formId`),
+  KEY `controlNumberServiceId_idx` (`serviceId`),
+  CONSTRAINT `controlNumberServiceId` FOREIGN KEY (`serviceId`) REFERENCES `services` (`serviceId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `controlNumbersFormId` FOREIGN KEY (`formId`) REFERENCES `forms` (`formId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -94,7 +97,6 @@ CREATE TABLE `controlnumbers` (
 
 LOCK TABLES `controlnumbers` WRITE;
 /*!40000 ALTER TABLE `controlnumbers` DISABLE KEYS */;
-INSERT INTO `controlnumbers` VALUES (1,'0128476360',1,'2015-03-29 15:11:17.000000',0);
 /*!40000 ALTER TABLE `controlnumbers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,8 +125,7 @@ CREATE TABLE `formquestions` (
 
 LOCK TABLES `formquestions` WRITE;
 /*!40000 ALTER TABLE `formquestions` DISABLE KEYS */;
-INSERT INTO `formquestions` VALUES (1,1,1,0),(1,2,2,0),(1,3,3,0),(1,4,4,0),(1,5,5,0),
-(2, 1, 1, 0), (2, 2, 2, 0), (2, 3, 3, 0), (3, 1, 1, 0), (3, 3, 2, 0), (3, 6, 3, 0);
+INSERT INTO `formquestions` VALUES (1,1,1,0),(1,2,2,0),(1,3,3,0),(1,4,4,0),(1,5,5,0),(2,1,1,0),(2,2,2,0),(2,3,3,0),(3,1,1,0),(3,3,2,0),(3,6,3,0);
 /*!40000 ALTER TABLE `formquestions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,14 +138,14 @@ DROP TABLE IF EXISTS `forms`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `forms` (
   `formId` int(11) NOT NULL AUTO_INCREMENT,
-  `serviceId` int(11) NOT NULL,
+  `officeId` int(11) NOT NULL,
   `startDate` date NOT NULL,
   `endDate` date NOT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`formId`),
-  KEY `formsServiceId_idx` (`serviceId`),
-  CONSTRAINT `forms_ibfk_1` FOREIGN KEY (`serviceId`) REFERENCES `services` (`serviceId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `formsOfficeId_idx` (`officeId`),
+  CONSTRAINT `formsOfficeId` FOREIGN KEY (`officeId`) REFERENCES `offices` (`officeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,8 +154,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,1,'2015-03-29','2016-03-29',0), ('2', '2', '2015-04-02', '2016-04-02', '0'),
-('3', '3', '2015-04-02', '2016-04-02', '0');
+INSERT INTO `forms` VALUES (1,1,'2015-03-29','2016-03-29',0),(2,2,'2015-04-02','2016-04-02',0),(3,3,'2015-04-02','2016-04-02',0);
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +173,7 @@ CREATE TABLE `offices` (
   PRIMARY KEY (`officeId`),
   KEY `officesOfficeHead_idx` (`officeHead`),
   CONSTRAINT `officeHead` FOREIGN KEY (`officeHead`) REFERENCES `users` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,16 +182,7 @@ CREATE TABLE `offices` (
 
 LOCK TABLES `offices` WRITE;
 /*!40000 ALTER TABLE `offices` DISABLE KEYS */;
-INSERT INTO `offices` VALUES
-(1,'Building and Grounds Maintenance Office',1,0),
-(2,'Civil and Sanitary Works Office',1,0),
-(3,'Mechanical and Electrical Works Office',1, 0),
-(4,'Facilities Management Office (STC)',1,0),
-(5,'Enrolment Services Hub',1,0),
-(6,'Office of Admissions and Scholarships',1,0),
-(7,'Office of the University Registrar',1,0),
-(8,'Office of the Academic Services for Integrated School (OASIS)',1,0),
-(9,'Enrolment Services for STC',1,0);
+INSERT INTO `offices` VALUES (1,'Building and Grounds Maintenance Office',1,0),(2,'Civil and Sanitary Works Office',1,0),(3,'Mechanical and Electrical Works Office',1,0),(4,'Facilities Management Office (STC)',1,0),(5,'Enrolment Services Hub',1,0),(6,'Office of Admissions and Scholarships',1,0),(7,'Office of the University Registrar',1,0),(8,'Office of the Academic Services for Integrate',1,0),(9,'Enrolment Services for STC',1,0);
 /*!40000 ALTER TABLE `offices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +226,7 @@ CREATE TABLE `services` (
   PRIMARY KEY (`serviceId`),
   KEY `servicesOfficeId_idx` (`officeId`),
   CONSTRAINT `servicesOfficeId` FOREIGN KEY (`officeId`) REFERENCES `offices` (`officeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,41 +235,7 @@ CREATE TABLE `services` (
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES
-(1,'Admission Inquiry',5,0),
-(2,'Application Form',5,0),
-(3,'Submission of Requirements',5,0),
-(4,'Scholarship Concerns',5,0),
-(5,'Change of Program',5,0),
-(6,'Reconsideration',5,0),
-(7,'Transferee',5,0),
-(8,'Enrolment',5,0),
-(9,'Request for Documents',5,0),
-(10,'ID Concerns',5,0),
-(11,'Graduation Concerns',5,0),
-(12,'LOA Concerns',5,0),
-(13,'Course Syllabus',5,0),
-(14,'Change of Student Information',5,0),
-(15,'Admission Inquiry',6,0),
-(16,'Application Form',6,0),
-(17,'Submission of Requirements',6,0),
-(18,'Graduate Studies Concerns',6,0),
-(19,'Scholarship Concerns',6,0),
-(20,'Change of Program',6,0),
-(21,'Reconsideration',6,0),
-(22,'Enrolment',7,0),
-(23,'ID Concerns',7,0),
-(24,'Graduation Concerns',7,0),
-(25,'Dropping/Shifting Concerns',7,0),
-(26,'Request for Documents',7,0),
-(27,'EAF',7,0),
-(28,'Clearance',7,0),
-(29,'Change of Grades',7,0),
-(30,'General Service',1,0),
-(31,'General Service',2,0),
-(32,'General Service',3,0),
-(33,'General Service',4,0),
-(34,'General Service',8,0);
+INSERT INTO `services` VALUES (1,'Admission Inquiry',5,0),(2,'Application Form',5,0),(3,'Submission of Requirements',5,0),(4,'Scholarship Concerns',5,0),(5,'Change of Program',5,0),(6,'Reconsideration',5,0),(7,'Transferee',5,0),(8,'Enrolment',5,0),(9,'Request for Documents',5,0),(10,'ID Concerns',5,0),(11,'Graduation Concerns',5,0),(12,'LOA Concerns',5,0),(13,'Course Syllabus',5,0),(14,'Change of Student Information',5,0),(15,'Admission Inquiry',6,0),(16,'Application Form',6,0),(17,'Submission of Requirements',6,0),(18,'Graduate Studies Concerns',6,0),(19,'Scholarship Concerns',6,0),(20,'Change of Program',6,0),(21,'Reconsideration',6,0),(22,'Enrolment',7,0),(23,'ID Concerns',7,0),(24,'Graduation Concerns',7,0),(25,'Dropping/Shifting Concerns',7,0),(26,'Request for Documents',7,0),(27,'EAF',7,0),(28,'Clearance',7,0),(29,'Change of Grades',7,0),(30,'General Service',1,0),(31,'General Service',2,0),(32,'General Service',3,0),(33,'General Service',4,0),(34,'General Service',8,0);
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,4 +281,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-29 14:42:50
+-- Dump completed on 2015-04-04 20:28:28
