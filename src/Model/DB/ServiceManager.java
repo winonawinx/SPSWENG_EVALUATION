@@ -35,6 +35,26 @@ public class ServiceManager
 		services = new ArrayList<Service>();
 	}
 	
+	public void addService(int officeId, String service) 
+	{
+		try
+		{
+			String query = "INSERT INTO services (officeId, serviceName) values(?,?)";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, officeId);
+			statement.setString(2, service);
+			statement.execute();
+			connect.close();
+
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to addService()");
+			e.printStackTrace();
+		}
+		connect.close();
+	}
+	
 	public Service getData(String service)
 	{
 		try
@@ -65,7 +85,7 @@ public class ServiceManager
 		return null;
 	}
 	
-	public Iterator<Service> getAllData(int officeID) 
+	public ArrayList<Service> getAllData(int officeID) 
 	{	
 		ArrayList<Service> ss = new ArrayList<Service>();
 		try 
@@ -88,10 +108,10 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return ss.iterator();
+		return ss;
 	}
 	
-	public Iterator<Service> getAllData(String officeID) 
+	public ArrayList<Service> getAllData(String officeID) 
 	{	
 		ArrayList<Service> ss = new ArrayList<Service>();
 		try 
@@ -114,10 +134,10 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return ss.iterator();
+		return ss;
 	}
 	
-	public Iterator<Service> getAllData() 
+	public ArrayList<Service> getAllData() 
 	{	
 		try 
 		{
@@ -138,7 +158,7 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return services.iterator();
+		return services;
 	}
 	
 		
@@ -190,9 +210,9 @@ public class ServiceManager
 		return false;
 	}
 
-	public Iterator<Service> getList()
+	public ArrayList<Service> getList()
 	{
-		return services.iterator();
+		return services;
 	}
 	
 	
