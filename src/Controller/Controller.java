@@ -26,7 +26,6 @@ import Model.DB.UserManager;
 
 public class Controller {
 
-	//comment
 	private UserManager um;
 	private OfficeManager om;
 	private AnswerManager am;
