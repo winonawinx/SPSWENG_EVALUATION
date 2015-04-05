@@ -235,9 +235,10 @@ public class ControlNumManager {
 		try
 		{
 			PreparedStatement ps; 
-			ps = connect.getConnection().prepareStatement("INSERT INTO controlnumbers (controlNumber, formId,expirationTime, status) VALUES (?, ?, ADDTIME(TIME(NOW()), '00:30:00'), '0')");
+			ps = connect.getConnection().prepareStatement("INSERT INTO controlnumbers (controlNumber,serviceId, formId,expirationTime, status) VALUES (?, ?, ?, ADDTIME(TIME(NOW()), '00:30:00'), '0')");
 			ps.setString(1, controlNum);
-			ps.setInt(2, formId);
+			ps.setInt(2, serviceId);
+			ps.setInt(3, formId);
 			ps.executeUpdate();
 		}
 			catch (SQLException e)
