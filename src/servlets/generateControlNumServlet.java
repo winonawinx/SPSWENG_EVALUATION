@@ -41,14 +41,11 @@ public class generateControlNumServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServiceManager sm = new ServiceManager();
-		OfficeManager om = new OfficeManager();
 		FormManager fm = new FormManager();
 		ControlNumManager cm = new ControlNumManager();
 		PrintWriter out = response.getWriter();
-		int officeId = om.getOfficeID(request.getParameter("offices"));
-		System.out.println("OfficeID in servlet is " + officeId);
-		int serviceId = Integer.valueOf(sm.getServiceId(request.getParameter("services")));
+		int serviceId = Integer.valueOf(request.getParameter("services"));
+		int officeId = Integer.valueOf(request.getParameter("offices"));
 		int formId = fm.getFormId(officeId);
 		if(formId != 0)
 		{

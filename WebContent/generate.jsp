@@ -16,8 +16,9 @@
         <script src="js/bootstrap.min.js"></script>
         <title>Generate Control Number</title>
         <script type="text/javascript">
-			var offices = new Array();
-			var services = new Array();
+			var offices = [];
+			var services = [];
+			var serviceIds = [];
 			
 			function setOffice(index, value)
 			{
@@ -26,12 +27,14 @@
 			
 			function initArray(index) 
 			{
-				services[index] = new Array();
+				services[index] = [];
+				serviceIds[index] = [];
 			}
 			
-			function setService(index, office, value) 
+			function setService(index, office, value, id) 
 			{
 				services[office][index] = value;
+				serviceIds[office][index] = id;
 			}
 			
 			function emptyOptions( box ) 
@@ -39,9 +42,9 @@
 				while ( box.options.length ) box.options[0] = null;
 			}
 			
-			function addOption(box, value) 
+			function addOption(box, value, id) 
 			{
-				box.options[box.options.length] = new Option(value, value);
+				box.options[box.options.length] = new Option(value, id);
 			}
 			
 			function updateServices(office, box)
@@ -49,25 +52,23 @@
 				emptyOptions(box);
 				for(var i = 0; i < services[office].length ; i++)
 				{
-					addOption(box, services[office][i]);
+					addOption(box, services[office][i], serviceIds[office][i]);
 				}	
 			}
 		</script>
     </head>
     <body>
     	<%
-			OfficeManager of = new OfficeManager();
-			ArrayList<Service> services = new ArrayList<Service>();
-			Iterator<Office> iterator = of.getAllData();
-			ArrayList<Office> offices = new ArrayList<Office>();
-			while(iterator.hasNext())
-			{
-				offices.add((Office)iterator.next());
-			}
-			
-			services = offices.get(0).getServices();
+		OfficeManager of = new OfficeManager();
+		Iterator<Service> services;
+		Iterator<Office> iterator = of.getAllData();
+		ArrayList<Office> offices = new ArrayList<Office>();
+		while(iterator.hasNext())
+		{
+			offices.add((Office)iterator.next());
+		}
 		%>  
-		<form action = "generateControlNumServlet" method = "post">
+		<form action="generateControlNumServlet" method="post">
         <div class="centerlogindiv">
             <div class="centercard">
                 <p><h1 class="label">Generate Control Number</h1></p>
@@ -75,26 +76,46 @@
                     <div class="form-group">
                         <label class="col-xs-12 addlabel control-label" >Office </label>
                         <select class="form-control" id  = "offices" name = "offices" onchange="updateServices(this.selectedIndex, document.getElementById('services'));">
-                            <% for(int i = 0; i < offices.size(); i++)
-			   					{ %>
-			   						<script> initArray(<%= i %>); </script>
-									<option value="<%= i %>"> <%= offices.get(i).getName() %> </option>
-									<script>setOffice(<%= i%>, "<%= offices.get(i).getName() %>"); </script>
-										<% for(int j = 0; j <  offices.get(i).getServices().size(); j++)
-						   			{ %>
-										<script> setService(<%= j%>, <%= i%>, '<%= offices.get(i).getServices().get(j).getName() %>'); </script>
-									<% } %>
+                            <% 
+                            for(int i = 0; i < offices.size(); i++)
+			   				{ 
+			   				%>
+			   					<script> initArray(<%= i %>); </script>
+								<option value="<%= offices.get(i).getID() %>"> <%= offices.get(i).getName() %> </option>
+								<script>setOffice(<%= i%>, "<%= offices.get(i).getName() %>"); </script>
+								<% 
+								services = offices.get(i).getServices();
+								int j = 0;
+								while(services.hasNext())
+						   		{ 
+						   			Service service = services.next();
+						   		%>
+									<script> setService(<%= j%>, <%= i%>, '<%= service.getName() %>', <%= service.getID() %>); </script>
+								<% 
+									j++;
+						   		} 
+						   		%>
 									
-							<% };%>
+							<% 
+							};
+							%>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label class="col-xs-12 addlabel control-label">Service </label>
-                        <select class="form-control" id = "services" name = "services">
-							<% for(int i = 0; i < services.size(); i++) {%>
-								<option value="<%= services.get(i).getName() %>"> <%= services.get(i).getName() %> </option>
-							<% } %>
+                        <select class="form-control" id="services" name="services">
+							<%
+							services = offices.get(0).getServices();
+							while(services.hasNext()) 
+							{
+								Service service = services.next();
+								System.out.println(service.getName());
+							%>
+								<option value="<%= service.getID()%>"> <%= service.getName() %> </option>
+							<% 
+							} 
+							%>
 						</select> 
                     </div>
                 </div>
