@@ -23,6 +23,27 @@
         int nQuestions = f.getQuestions().size();
         %>
         
+        <div id="errorModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Error</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2>Please fill up all fields.</h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="confirmationModal" class="modal fade my-modal">
             <div class="modal-dialog my-modal-dialog">
                 <div class="modal-content my-modal-content">
@@ -100,10 +121,8 @@
         	{
         		for(var i=0; i<<%= nQuestions%>; i++)
         		{
-        			if(document.getElementById("answer"+i).value.length<1){
-        				alert("Please fill up all fields.");
+        			if(document.getElementById("answer"+i).value.length<1)
         				return false;	
-        			}
         		}
         		return true;
         	}
@@ -125,7 +144,12 @@
         	
         	function checkEval()
         	{
-        		if(!checkConfirm() && validate())
+        		if(!validate())
+        		{
+        			$('#errorModal').modal('show');
+        			return false;
+        		}
+        		else if(!checkConfirm())
         		{
         			$('#confirmationModal').modal('show');
         			return false;
