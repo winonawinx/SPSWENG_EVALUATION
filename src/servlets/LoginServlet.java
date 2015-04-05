@@ -32,6 +32,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.getSession().setAttribute("Error", "Invalid");
+		request.getRequestDispatcher("personnellogin.jsp").forward(request, response);
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 		}
 			
 		else
-			response.sendRedirect("personnellogin.jsp");
+			doGet(request, response);
 	}
 
 }
