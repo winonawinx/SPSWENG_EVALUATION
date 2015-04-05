@@ -28,27 +28,6 @@ public class EditServiceModalServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Controller controller = new Controller();
-		String clicked = (String) request.getParameter("mhidden");
-		String service = (String) request.getParameter("serviceName");
-		System.out.println("In Edit Service Modal Servlet == " + service);
-		
-		if(clicked.equals("Edit Form"))
-		{
-			Office office = null;
-	    	Cookie[] cookies = request.getCookies();
-	        for(Cookie cookie:cookies){
-	           if(cookie.getName().equals("Office")){
-	        	   System.out.println("Cookie is " + cookie.getValue());
-	              office = controller.getOfficeByName(cookie.getValue());
-	           }
-	       }
-	        
-			
-			
-			response.addCookie(new Cookie("Service", String.valueOf(controller.getServiceID(service, office.getID()))));
-			response.sendRedirect("modifyquestions.jsp");
-		}	
 		
 	}
 

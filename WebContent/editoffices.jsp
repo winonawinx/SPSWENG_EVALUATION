@@ -36,7 +36,7 @@
                         <div class="form-group clearfloat"></div>
                         <div class="floatright">
                             <button type="button" class="blackbtn" onClick="">Save</button>
-                            <button type = "submit" id="viewservicesbtn" name = "viewservicesbtn" value = "View Services" class = "blackbtn abtn" onclick = "pressed(this);">View Services</button> 
+                            <button type = "submit" id="editformbtn" name = "editformbtn" value = "Edit Form" class = "blackbtn abtn" onclick = "pressed(this);">Edit Form</button> 
                             <button type="button" class="blackbtn" data-dismiss = "modal">Cancel</button>
                             <button type="button" id = "removeofficebtn" class="blackbtn" onClick="">Remove</button>   
                         	<input type = "hidden" id = "mhidden" name = "mhidden">

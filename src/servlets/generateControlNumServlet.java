@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Model.DB.ControlNumManager;
 import Model.DB.FormManager;
+import Model.DB.OfficeManager;
 import Model.DB.ServiceManager;
 
 /**
@@ -41,11 +42,14 @@ public class generateControlNumServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServiceManager sm = new ServiceManager();
+		OfficeManager om = new OfficeManager();
 		FormManager fm = new FormManager();
 		ControlNumManager cm = new ControlNumManager();
 		PrintWriter out = response.getWriter();
+		int officeId = om.getOfficeID(request.getParameter("offices"));
+		System.out.println("OfficeID in servlet is " + officeId);
 		int serviceId = Integer.valueOf(sm.getServiceId(request.getParameter("services")));
-		int formId = fm.getFormId(serviceId);
+		int formId = fm.getFormId(officeId);
 		if(formId != 0)
 		{
 			String controlNum = cm.insertControlNum(formId, serviceId);

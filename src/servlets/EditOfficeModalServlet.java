@@ -27,12 +27,22 @@ public class EditOfficeModalServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		Controller controller = new Controller();
 		String clicked = (String) request.getParameter("mhidden");
 		response.addCookie(new Cookie("Office", (String) request.getParameter("ofcName")));
 		
-		if(clicked.equals("View Services"))
+		if(clicked.equals("Edit Form"))
 		{
-			response.sendRedirect("viewservices.jsp");
+			Office office = null;
+	    	Cookie[] cookies = request.getCookies();
+	        for(Cookie cookie:cookies){
+	           if(cookie.getName().equals("Office")){
+	        	   System.out.println("Cookie is " + cookie.getValue());
+	              office = controller.getOfficeByName(cookie.getValue());
+	           }
+	       }
+	        
+			response.sendRedirect("modifyquestions.jsp");
 		}	
 		
 	}

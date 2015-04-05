@@ -16,7 +16,7 @@
     </head>
     <body>
         <%
-        Controller controller = new Controller();
+        /*Controller controller = new Controller();
 		Office office = null;
     	Cookie[] cookies = request.getCookies();
         for(Cookie cookie:cookies){
@@ -26,7 +26,9 @@
            }
        }
         
-		Iterator<Service> services = controller.getOfficeServices(office.getID());
+		Iterator<Service> services = controller.getOfficeServices(office.getID());*/
+		
+		Iterator<Service> services = (Iterator<Service>)session.getAttribute("Services");
         
         %>
         <!-- Modal HTML -->

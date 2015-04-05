@@ -100,6 +100,44 @@ private static OfficeManager oM = null;
 		return null;
 	}
 	
+	public Office getOffice(String Name)
+	{
+		try
+		{
+			Office o;
+			
+			String query = "SELECT * FROM Offices WHERE officeName = ?";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, Name);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				ArrayList<Service> services = new ArrayList<Service>();
+				Iterator iterator = null;
+				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				iterator = sm.getAllData(o.getID());
+				while(iterator.hasNext())
+				{
+					services.add((Service)iterator.next());
+				}
+				o.setServices(services);
+				return o;
+			}
+			
+			else 
+				return null;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT Office");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return null;
+	}
+	
 	public Office getDataByName(String ID)
 	{
 		try
@@ -259,4 +297,35 @@ private static OfficeManager oM = null;
 		connect.close();
 		return 0;
 	}
+	
+	public int getOfficeID(String office)
+	{
+		try
+		{
+			System.out.println("Office selected in OfficeManager == " + office);
+			Office o;
+			
+			String query = "SELECT officeID FROM Offices WHERE officeName = ?;";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, office);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				return rs.getInt(1) + 1;
+			}
+			
+			else 
+				return 0;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT Office");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return 0;
+	}
+	
 }

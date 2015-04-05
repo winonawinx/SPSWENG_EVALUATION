@@ -36,6 +36,11 @@ public class OfficesMenuServlet extends HttpServlet {
 		{
 			response.sendRedirect("adminmenu.jsp");
 		}
+		else
+		{
+			request.getSession().setAttribute("Services", controller.getOffice(Integer.parseInt(option)).getServices());
+			response.sendRedirect("viewservices.jsp");
+		}
 	
 	}
 

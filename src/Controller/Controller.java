@@ -157,6 +157,11 @@ public class Controller {
 		return om.getData(officeID);
 	}
 	
+	public Office getOffice(String office)
+	{
+		return om.getOffice(office);
+	}
+	
 	public Office getOfficeByName(String officeName)
 	{
 		return om.getDataByName(officeName);
@@ -253,9 +258,9 @@ public class Controller {
 		return cmm.getServiceComments(serviceid);
 	}
 	
-	public int getFormID(int serviceID)
+	public int getFormID(int officeID)
 	{
-		return fm.getFormId(serviceID);
+		return fm.getFormId(officeID);
 	}
 	
 	public int getServiceID(String service, int officeID)

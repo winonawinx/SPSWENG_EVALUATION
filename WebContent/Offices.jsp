@@ -28,8 +28,6 @@
                     <input type = "hidden" name = "pindot" id = "pindot">
                 </div>
             </h1>
-            </form>
-            <form action = "ReportServlet" method = "post">
             <div class="contentdiv">
                 <div class="row">
                    
@@ -39,22 +37,16 @@
                   		Office office = offices.next();
                   %>
                     <div class="col-xs-4">
-                        <button type="submit" class="blackbtn view" id = "office<%=office.getID()%>>" value = "<%=office.getID()%>" onclick = "clicked(this)"><%= office.getName() %></button>
+                        <button type="submit" class="blackbtn view" id = "office<%=office.getID()%>>" value = "<%=office.getID()%>" onclick = "menu(this)"><%= office.getName() %></button>
                     </div>
 				<% } %>
                 </div>
-                <input type = "hidden" id = "answer" name = "answer" value = "0">
             </div>
-                  </form>
+            </form>
         </div>
   
         
         <script>
-        	function clicked(element)
-        	{
-        		var pressedBtn = element.id;
-         		document.getElementById("answer").value = document.getElementById(pressedBtn).value;
-        	}
         	function menu(element)
         	{
         		var pressedBtn = element.id;

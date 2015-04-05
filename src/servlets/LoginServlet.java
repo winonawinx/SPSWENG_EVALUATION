@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("UN " + request.getParameter("email"));
 		System.out.println("PW " + request.getParameter("password"));
 		User user = m.getUser(request.getParameter("email"), request.getParameter("password"));
+		response.addCookie(new Cookie("user", user.getEmail()));
 		if(user != null)
 		{
 			if(user.getType().equals("admin"))

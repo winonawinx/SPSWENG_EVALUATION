@@ -1,3 +1,4 @@
+<%@page import="Model.Office"%>
 <%@page import="Model.Form"%>
 <%@page import="Controller.Controller"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -24,13 +25,10 @@
 	      {
 	          office = cookie.getValue();
 	      }
-	      if(cookie.getName().equals("Service"))
-	      {
-	    	  service = cookie.getValue();
-	      }
 	     }
 	       
-	    int formID = con.getFormID(Integer.parseInt(service));
+	    Office o = con.getOfficeByName(office);
+	    int formID = con.getFormID(o.getID());
 	    Form form = con.getForm(formID);
 	    
         %>

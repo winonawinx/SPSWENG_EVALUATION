@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Office {
 	
@@ -40,9 +41,9 @@ public class Office {
 		return isArchived;
 	}
 	
-	public ArrayList<Service> getServices()
+	public Iterator<Service> getServices()
 	{
-		return services;
+		return services.iterator();
 	}
 	
 	public void setID(int iD)

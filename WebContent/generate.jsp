@@ -74,7 +74,7 @@
                 <div id="generateselect" class="form-horizontal row" style="margin-top:40px;">
                     <div class="form-group">
                         <label class="col-xs-12 addlabel control-label" >Office </label>
-                        <select class="form-control" name = "offices" onchange="updateServices(this.selectedIndex, document.getElementById('services'));">
+                        <select class="form-control" id  = "offices" name = "offices" onchange="updateServices(this.selectedIndex, document.getElementById('services'));">
                             <% for(int i = 0; i < offices.size(); i++)
 			   					{ %>
 			   						<script> initArray(<%= i %>); </script>

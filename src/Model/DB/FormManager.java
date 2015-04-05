@@ -173,13 +173,13 @@ public class FormManager
 	}
 
 	
-	public int getFormId(int serviceId) 
+	public int getFormId(int officeId) 
 	{
 		try {
-			System.out.println(serviceId);
+			System.out.println(officeId);
 			String sql = "SELECT formId "
 					+ "FROM forms "
-					+ "WHERE serviceId = " + serviceId + " AND isArchived = 0;";
+					+ "WHERE officeId = " + officeId + " AND isArchived = 0;";
 			statement = connect.getConnection().prepareStatement(sql);
 			rs = statement.executeQuery(sql);
 			if(rs.next()){
