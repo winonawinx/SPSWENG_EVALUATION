@@ -48,7 +48,6 @@
                         <div class="form-group clearfloat"></div>
                         <div class="floatright">
                             <button type="button" class="blackbtn" onClick="">Save</button>
-                            <button type="submit" class="blackbtn" id = "EditForm" name = "EditForm" value = "Edit Form" onClick="pressed(this);">Edit Form</button>
                             <button type="button" class="blackbtn" data-dismiss="modal">Cancel</button>
                             <button type="button" id = "removeofficebtn" class="blackbtn" onClick="">Remove</button>   
                         	<input type = "hidden" id = "mhidden" name = "mhidden">
