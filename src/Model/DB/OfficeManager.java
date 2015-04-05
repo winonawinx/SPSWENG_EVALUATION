@@ -77,7 +77,7 @@ private static OfficeManager oM = null;
 			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
 				iterator = sm.getAllData(ID);
 				while(iterator.hasNext())
 				{
@@ -115,7 +115,7 @@ private static OfficeManager oM = null;
 			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
 				iterator = sm.getAllData(o.getID());
 				while(iterator.hasNext())
 				{
@@ -154,7 +154,7 @@ private static OfficeManager oM = null;
 			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
 				iterator = sm.getAllData(ID);
 				while(iterator.hasNext())
 				{
@@ -190,7 +190,7 @@ private static OfficeManager oM = null;
 			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				Office o = new Office(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				Office o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
 				iterator = sm.getAllData(o.getID());
 				while(iterator.hasNext())
 				{
@@ -213,15 +213,14 @@ private static OfficeManager oM = null;
 	{
 		Office o = (Office) obj;
 		
-		String query = "UPDATE offices SET officeID = ?, officename = ?,  officeheadid = ?, isArchived = ? WHERE officeName = ?";
+		String query = "UPDATE offices SET officeID = ?, officename = ?, isArchived = ? WHERE officeName = ?";
 		try 
 		{
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, o.getID());
 			statement.setString(2, o.getName());
-			statement.setInt(3, o.getHead());
-			statement.setBoolean(4, o.getIsArchived());
-			statement.setString(5, o.getName());
+			statement.setBoolean(3, o.getIsArchived());
+			statement.setString(4, o.getName());
 			statement.execute();
 			connect.close();
 			return true;
@@ -239,12 +238,11 @@ private static OfficeManager oM = null;
 		try
 		{
 			Office o = (Office) obj;
-			String query = "INSERT INTO offices values(?,?,?,?)";
+			String query = "INSERT INTO offices values(?,?,?)";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, o.getID());
 			statement.setString(2, o.getName());
-			statement.setInt(4, o.getHead());
-			statement.setBoolean(5, o.getIsArchived());
+			statement.setBoolean(3, o.getIsArchived());
 			statement.execute();
 			connect.close();
 			return true;
@@ -326,6 +324,39 @@ private static OfficeManager oM = null;
 		
 		connect.close();
 		return 0;
+	}
+	
+	public Iterator<Office> getOfficesByHead(int userID)
+	{
+		try 
+		{
+			String query = "SELECT * FROM Offices WHERE officeID IN (SELECT officeID FROM officeheads WHERE userID = ? AND isArchived = '0') and isArchived = '0'";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, userID);
+			rs = statement.executeQuery();
+			
+			offices = new ArrayList<Office>();
+			while(rs.next())
+			{
+				ArrayList<Service> services = new ArrayList<Service>();
+				Iterator iterator = null;
+				Office o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
+				iterator = sm.getAllData(o.getID());
+				while(iterator.hasNext())
+				{
+					services.add((Service)iterator.next());
+				}
+				o.setServices(services);
+				offices.add(o);			
+			}
+						
+		} 
+		catch (SQLException e) {
+			System.out.println("ERROR in getting all data from DB");
+			e.printStackTrace();
+		}
+		connect.close();
+		return offices.iterator();
 	}
 	
 }

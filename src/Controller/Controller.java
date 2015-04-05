@@ -64,9 +64,9 @@ public class Controller {
 		return om.getAllData();
 	}
 	
-	public void addOffice(int ID, String name, int head, Boolean isArchived)
+	public void addOffice(int ID, String name, Boolean isArchived)
 	{
-		om.insertData(new Office(ID, name, head, isArchived));
+		om.insertData(new Office(ID, name, isArchived));
 	}
 	
 	public Iterator<Answer> getAllAnswers()
@@ -268,4 +268,8 @@ public class Controller {
 		return sm.getServiceID(service, officeID);
 	}
 	
+	public Iterator<Office> getOfficeHeadOffices(int userID)
+	{
+		return om.getOfficesByHead(userID);
+	}
 }

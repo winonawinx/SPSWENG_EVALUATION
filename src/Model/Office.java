@@ -7,15 +7,13 @@ public class Office {
 	
 	private int ID;
 	private String name;
-	private int head;
 	private boolean isArchived;
 	private ArrayList<Service> services;
 
-	public Office(int ID, String name, int head, Boolean isArchived)
+	public Office(int ID, String name, Boolean isArchived)
 	{
 		setID(ID);
 		setName(name);
-		setHead(head);
 		setIsArchived(isArchived);
 		services = new ArrayList<Service>();
 	}
@@ -29,11 +27,6 @@ public class Office {
 	public String getName()
 	{
 		return name;
-	}
-	
-	public int getHead()
-	{
-		return head;
 	}
 	
 	public Boolean getIsArchived()
@@ -54,11 +47,6 @@ public class Office {
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-		
-	public void setHead(int head)
-	{
-		this.head = head;
 	}
 	
 	public void setIsArchived(Boolean isArchived)

@@ -53,9 +53,10 @@ public class LoginServlet extends HttpServlet {
 				response.sendRedirect("generate.jsp");
 			if(user.getType().equals("officehead"))
 			{
-				request.getSession().setAttribute("Office", m.getOffice(m.getOfficeIDbyHead(user.getID())));
-				request.getSession().setAttribute("Questions", m.getOfficeQuestions(m.getOfficeIDbyHead(user.getID())));
-				response.sendRedirect("report.jsp");
+				request.getSession().setAttribute("Offices", m.getOfficeHeadOffices(user.getID()));
+				//request.getSession().setAttribute("Questions", m.getOfficeQuestions(m.getOfficeIDbyHead(user.getID())));
+				//response.sendRedirect("report.jsp");
+				response.sendRedirect("officeheadmenu.jsp");
 			}
 		}
 			

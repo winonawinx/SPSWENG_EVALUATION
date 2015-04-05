@@ -1,3 +1,4 @@
+<%@page import="Model.Service"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Controller.Controller"%>
 <%@page import="Model.Question"%>
@@ -37,13 +38,23 @@
                         <tr>
 	                        <th>Items</th>
                         <%
-                        	int serviceSize = o.getServices().size();
+                        	Iterator iterator = o.getServices();
+                        	int size = 0;
+                        	while(iterator.hasNext())
+                        	{
+                        		size++;
+                      			Service s = (Service)iterator.next();
+                        	}
+                        	int serviceSize = size;
                         	int questionSize = 0;
                         	float[] total = new float[serviceSize];
-                        	for(int x = 0 ; x < serviceSize; x++)
+                        	Iterator services = o.getServices();
+                        	//for(int x = 0 ; x < serviceSize; x++)
+                        	while(services.hasNext())
                         	{
+                        		Service service = (Service) services.next();
                         %>                        
-                            <th><%=o.getServices().get(x).getName()%></th>
+                            <th><%=service.getName()%></th>
                         <%
                         	}
                         %>
@@ -59,10 +70,14 @@
                             <tr>
                                 <td><%=question.getQuestion() %></td>
                                 <%
-                                	for(int y = 0; y < serviceSize; y++)
+                                	services = o.getServices();
+                                	int y = 0;
+                                	while(services.hasNext())
                                 	{
-                                		float average = m.getAVG(question.getID(), o.getServices().get(y).getID());
+                                		Service service = (Service) services.next();
+                                		float average = m.getAVG(question.getID(), service.getID());
                                 		total[y] += average;
+                                		y++;
                               	%>
                                 <td><%= average %></td>
                                 <%
