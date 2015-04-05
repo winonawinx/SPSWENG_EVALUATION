@@ -55,6 +55,7 @@ public class ServiceManager
 		connect.close();
 	}
 	
+	
 	public Service getData(String service)
 	{
 		try
@@ -85,7 +86,7 @@ public class ServiceManager
 		return null;
 	}
 	
-	public ArrayList<Service> getAllData(int officeID) 
+	public Iterator<Service> getAllData(int officeID) 
 	{	
 		ArrayList<Service> ss = new ArrayList<Service>();
 		try 
@@ -108,10 +109,10 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return ss;
+		return ss.iterator();
 	}
 	
-	public ArrayList<Service> getAllData(String officeID) 
+	public Iterator<Service> getAllData(String officeID) 
 	{	
 		ArrayList<Service> ss = new ArrayList<Service>();
 		try 
@@ -134,10 +135,10 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return ss;
+		return ss.iterator();
 	}
 	
-	public ArrayList<Service> getAllData() 
+	public Iterator<Service> getAllData() 
 	{	
 		try 
 		{
@@ -158,7 +159,7 @@ public class ServiceManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return services;
+		return services.iterator();
 	}
 	
 		
@@ -210,9 +211,9 @@ public class ServiceManager
 		return false;
 	}
 
-	public ArrayList<Service> getList()
+	public Iterator<Service> getList()
 	{
-		return services;
+		return services.iterator();
 	}
 	
 	
