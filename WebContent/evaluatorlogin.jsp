@@ -11,18 +11,53 @@
         <title>Evaluation Form</title>
     </head>
     <body>
+  		 
+    	<div id="errorModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Error</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2 id="message"></h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    	
+    	
     	<% 
     		String popup = (String) session.getAttribute("popup"); 
     		String cn = (String) session.getAttribute("cn");
+    		session.setAttribute("popup", null);
+    		session.setAttribute("cn", null);
     	%>
-    	
     	<script>
     	var popup = '<%= popup%>';
     	var cn = '<%= cn%>';
-    	if(popup == 'Expired') {
-    		alert(cn + " has Expired");
-    	} else if(popup == 'Does not Exist') {
-    		alert(cn + " does not Exist");
+    	if(popup == 'Expired')
+    	{
+    		$("#message").text(cn + " has expired!");
+    		$('#errorModal').modal('show');
+    	}
+    	else if(popup == 'Does not Exist')
+    	{
+    		$("#message").text(cn + " does not exist!");
+    		console.log("DNE");
+    		$('#errorModal').modal('show');
+    	}
+    	else
+    	{
+    		message = "";
+    		$('#errorModal').modal('hide');
     	}
     	</script>
         <div class="centerlogindiv">
