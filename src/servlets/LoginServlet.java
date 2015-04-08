@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 		response.addCookie(new Cookie("user", user.getEmail()));
 		if(user != null)
 		{
-			if(user.getType().equals("admin"))
+			if(user.getType().equals("administrator"))
 				response.sendRedirect("adminmenu.jsp");
 			if(user.getType().equals("service personnel"))
 				response.sendRedirect("generate.jsp");
