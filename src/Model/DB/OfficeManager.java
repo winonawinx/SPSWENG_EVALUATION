@@ -3,6 +3,7 @@ package Model.DB;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -254,6 +255,51 @@ private static OfficeManager oM = null;
 		}
 		connect.close();
 		return false;
+	}
+	
+	public int addOffice(String officeName) 
+	{
+		int id = 0;
+		try
+		{
+			String query = "INSERT INTO offices (officeName) values(?)";
+			statement = connect.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			statement.setString(1, officeName);
+			statement.executeUpdate();
+			rs = statement.getGeneratedKeys();
+			
+			if(rs.next()) {
+				id = rs.getInt(1);
+			}
+			
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to INSERT new office");
+			e.printStackTrace();
+		}
+		connect.close();
+		System.out.println(id);
+		return id;
+	}
+	
+	public void setOfficeHead(int userId, int officeId) 
+	{
+		try
+		{
+			String query = "INSERT INTO officeheads (userId, officeId) values(?, ?)";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, userId);
+			statement.setInt(2, officeId);
+			statement.executeUpdate();
+			
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to INSERT new office");
+			e.printStackTrace();
+		}
+		connect.close();
 	}
 
 	public ArrayList<Office> getList()
