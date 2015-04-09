@@ -121,7 +121,7 @@ public class FormManager
 		try 
 		{
 			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, f.getService());
+			statement.setInt(1, f.getOffice());
 			statement.setDate(2, f.getStartDate());
 			statement.setDate(3, f.getEndDate());
 			statement.setBoolean(4, f.getIsArchived());
@@ -143,9 +143,9 @@ public class FormManager
 		try
 		{
 			Form f = (Form) obj;
-			String query = "INSERT INTO forms values(?,?,?,?)";
+			String query = "INSERT INTO forms values(DEFAULT,?,?,?,?)";
 			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, f.getService());
+			statement.setInt(1, f.getOffice());
 			statement.setDate(2, f.getStartDate());
 			statement.setDate(3, f.getEndDate());
 			statement.setBoolean(4, f.getIsArchived());
@@ -250,6 +250,27 @@ public class FormManager
 		}
 		connect.close();
 		return OfficeService;
+	}
+
+	public boolean insertFormQuestions(int formID, int id)
+	{
+		try
+		{
+			String query = "INSERT INTO formquestions values(?,?,'1')";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, formID);
+			statement.setInt(2, id);
+			statement.execute();
+			connect.close();
+			return true;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to INSERT new formquestion");
+			e.printStackTrace();
+		}
+		connect.close();
+		return false;
 	}
 	
 }

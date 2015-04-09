@@ -110,7 +110,6 @@ DROP TABLE IF EXISTS `formquestions`;
 CREATE TABLE `formquestions` (
   `formId` int(11) NOT NULL,
   `questionId` int(11) NOT NULL,
-  `number` int(11) NOT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   KEY `formquestionsFormId_idx` (`formId`),
   KEY `formsquestionsQuestionId_idx` (`questionId`),
@@ -125,7 +124,7 @@ CREATE TABLE `formquestions` (
 
 LOCK TABLES `formquestions` WRITE;
 /*!40000 ALTER TABLE `formquestions` DISABLE KEYS */;
-INSERT INTO `formquestions` VALUES (1,1,1,0),(1,2,2,0),(1,3,3,0),(1,4,4,0),(1,5,5,0),(2,1,1,0),(2,2,2,0),(2,3,3,0),(3,1,1,0),(3,3,2,0),(3,6,3,0);
+INSERT INTO `formquestions` VALUES (1,1,0),(1,2,0),(1,3,0),(1,4,0),(1,5,0),(2,1,0),(2,2,0),(2,3,0),(3,1,0),(3,3,0),(3,6,0);
 /*!40000 ALTER TABLE `formquestions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,6 +162,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `offices`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `offices` (
@@ -171,6 +171,7 @@ CREATE TABLE `offices` (
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`officeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

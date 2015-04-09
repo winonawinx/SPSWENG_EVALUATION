@@ -7,16 +7,16 @@ import java.util.ArrayList;
 public class Form {
 
 	private int ID;
-	private int service;
+	private int office;
 	private Date startDate;
 	private Date endDate;
 	private Boolean isArchived;
 	private ArrayList<Question> questions;
 	
-	public Form(int ID, int service, Date startDate, Date endDate, Boolean isArchived)
+	public Form(int ID, int office, Date startDate, Date endDate, Boolean isArchived)
 	{
 		setID(ID);
-		setService(service);
+		setOffice(office);
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setIsArchived(isArchived);
@@ -33,9 +33,9 @@ public class Form {
 		return questions;
 	}
 	
-	public int getService()
+	public int getOffice()
 	{
-		return service;
+		return office;
 	}
 	
 	public Date getStartDate()
@@ -63,9 +63,9 @@ public class Form {
 		this.questions = questions;
 	}
 	
-	public void setService(int service)
+	public void setOffice(int office)
 	{
-		this.service = service;
+		this.office = office;
 	}
 	
 	public void setStartDate(Date startDate)

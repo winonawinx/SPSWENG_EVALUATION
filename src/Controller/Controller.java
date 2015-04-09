@@ -272,4 +272,15 @@ public class Controller {
 	{
 		return om.getOfficesByHead(userID);
 	}
+	
+	public Question getQuestion(String question)
+	{
+		return qm.getData(question);
+	}
+	
+	public void addFormQuestions(ArrayList<Question> questions, int formID)
+	{
+		for(int x = 0; x < questions.size(); x++)
+			fm.insertFormQuestions(formID, questions.get(x).getID());
+	}
 }
