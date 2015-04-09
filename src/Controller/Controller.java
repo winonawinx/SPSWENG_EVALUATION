@@ -49,7 +49,7 @@ public class Controller {
 		getAllData();
 	}
 	
-	public ArrayList<User> getAllUsers()
+	public Iterator<User> getAllUsers()
 	{
 		return um.getAllData();
 	}
@@ -169,7 +169,12 @@ public class Controller {
 	
 	public User getUser(String email, String password)
 	{
-		ArrayList<User> users = getAllUsers();
+		Iterator<User> iterator = getAllUsers();
+		ArrayList<User> users = new ArrayList<User>();
+		while(iterator.hasNext())
+		{
+			users.add((User)iterator.next());
+		}
 		for(int i = 0, size = users.size(); i < size; i++)
 		{
 			User u = users.get(i);
@@ -213,8 +218,12 @@ public class Controller {
 	
 	public Boolean hasUser(String userEmail)
 	{
-		ArrayList<User> users = um.getAllData();
-		
+		Iterator<User> iterator = um.getAllData();
+		ArrayList<User> users = new ArrayList<User>();
+		while(iterator.hasNext())
+		{
+			users.add((User)iterator.next());
+		}
 		for(int x = 0; x < users.size(); x++)
 		{
 			if(users.get(x).getEmail().equals(userEmail))
