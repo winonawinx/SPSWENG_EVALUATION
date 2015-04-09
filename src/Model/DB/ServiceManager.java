@@ -300,4 +300,33 @@ public class ServiceManager
 		return -1;
 	}
 	
+	public Service getService(int serviceId)
+	{
+		try
+		{
+			Service s;
+			
+			String query = "SELECT * FROM Services WHERE serviceId = ?";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, serviceId);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				s = new Service(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				return s;
+			}
+			
+			else 
+				return null;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT Service");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return null;
+	}
 }

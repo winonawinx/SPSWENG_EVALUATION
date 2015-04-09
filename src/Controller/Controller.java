@@ -283,4 +283,9 @@ public class Controller {
 		for(int x = 0; x < questions.size(); x++)
 			fm.insertFormQuestions(formID, questions.get(x).getID());
 	}
+	
+	public Service getService(int serviceId)
+	{
+		return sm.getService(serviceId);
+	}
 }

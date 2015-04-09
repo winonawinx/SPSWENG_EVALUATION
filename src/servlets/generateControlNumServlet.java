@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Controller.Controller;
 import Model.DB.ControlNumManager;
 import Model.DB.FormManager;
 import Model.DB.OfficeManager;
@@ -43,6 +44,7 @@ public class generateControlNumServlet extends HttpServlet {
 
 		FormManager fm = new FormManager();
 		ControlNumManager cm = new ControlNumManager();
+		Controller con = new Controller();
 		PrintWriter out = response.getWriter();
 		int serviceId = Integer.valueOf(request.getParameter("services"));
 		int officeId = Integer.valueOf(request.getParameter("offices"));
@@ -50,7 +52,10 @@ public class generateControlNumServlet extends HttpServlet {
 		if(formId != 0)
 		{
 			String controlNum = cm.insertControlNum(formId, serviceId);
-			out.println(controlNum + " has been generated!");
+			request.getSession().setAttribute("Office", con.getOffice(officeId).getName());
+			request.getSession().setAttribute("Service", con.getService(serviceId).getName());
+			request.getSession().setAttribute("ControlNumber", controlNum);			
+			response.sendRedirect("generated.jsp");
 		} 
 		else
 		{
