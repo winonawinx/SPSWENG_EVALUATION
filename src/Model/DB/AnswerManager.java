@@ -150,7 +150,7 @@ public class AnswerManager{
 	}
 	
 	
-	public float getAVG(int questionID, int serviceID)
+	public float getAVG(int questionID, int serviceID, int officeID)
 	{
 		
 		try
@@ -161,10 +161,12 @@ public class AnswerManager{
 					+ "FROM answers a LEFT JOIN controlnumbers c ON a.controlNumberID = c.controlNumberID "
 					+ "LEFT JOIN formquestions fq ON c.formId = fq.formId AND a.questionId = fq.questionId "
 					+ "LEFT JOIN forms f ON fq.formId = f.formId "
-					+ "LEFT JOIN services s ON f.serviceId = s.serviceId "
+					+ "LEFT JOIN offices o ON f.officeId = o.officeId "
+					+ "LEFT JOIN services s ON o.officeId = s.officeId "
 					+ "WHERE a.questionId = ? AND s.serviceId = ?";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, questionID);
+			statement.setInt(2, serviceID);
 			statement.setInt(2, serviceID);
 			rs = statement.executeQuery();
 

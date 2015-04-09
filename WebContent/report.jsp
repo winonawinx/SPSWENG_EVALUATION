@@ -75,7 +75,7 @@
                                 	while(services.hasNext())
                                 	{
                                 		Service service = (Service) services.next();
-                                		float average = m.getAVG(question.getID(), service.getID());
+                                		float average = m.getAVG(question.getID(), service.getID(), o.getID());
                                 		total[y] += average;
                                 		y++;
                               	%>

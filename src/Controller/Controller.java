@@ -179,9 +179,9 @@ public class Controller {
 		return null;
 	}
 	
-	public float getAVG(int questionID, int serviceID)
+	public float getAVG(int questionID, int serviceID, int officeID)
 	{
-		return am.getAVG(questionID, serviceID);
+		return am.getAVG(questionID, serviceID, officeID);
 	}
 	
 	public void insertControlNumber(ControlNumber controlnumber)
