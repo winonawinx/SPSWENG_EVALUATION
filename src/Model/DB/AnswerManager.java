@@ -162,14 +162,12 @@ public class AnswerManager{
 					+ "LEFT JOIN formquestions fq ON c.formId = fq.formId AND a.questionId = fq.questionId "
 					+ "LEFT JOIN forms f ON fq.formId = f.formId "
 					+ "LEFT JOIN offices o ON f.officeId = o.officeId "
-					+ "LEFT JOIN services s ON o.officeId = s.officeId "
+					+ "LEFT JOIN services s ON o.officeId = s.officeId AND s.serviceId = c.serviceId "
 					+ "WHERE a.questionId = ? AND s.serviceId = ?";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, questionID);
-			statement.setInt(2, serviceID);
-			statement.setInt(2, serviceID);
+			statement.setInt(2,serviceID);
 			rs = statement.executeQuery();
-
 			
 			if (rs.next() != false)
 			{

@@ -228,9 +228,9 @@ public class Controller {
 		return om.getIDbyHead(headID);
 	}
 	
-	public String getFormOfficeAndService(int formID)
+	public String getFormOfficeAndService(int controlNumberID, int formID)
 	{
-		return fm.getFormOfficeAndService(formID);
+		return fm.getFormOfficeAndService(controlNumberID, formID);
 	}
 	
 	public Iterator<Service> getOfficeServices(int officeid)

@@ -226,15 +226,17 @@ public class FormManager
 		return form;
 	}
 	
-	public String getFormOfficeAndService(int formID)
+	public String getFormOfficeAndService(int controlNumberID, int formID)
 	{
 		String OfficeService = null;
 		try 
 		{
-			String query = "SELECT S.serviceName, O.officeName FROM services S, Offices O WHERE" + 
-					" S.serviceID = (SELECT serviceID FROM forms WHERE formID = " + formID + ") AND " + 
-					"O.officeID = (SELECT officeID FROM services WHERE serviceID = (SELECT serviceID FROM forms WHERE formID = " + formID + "));";
+			String query = "SELECT S.serviceName, O.officeName FROM services S, Offices O, controlnumbers C WHERE" + 
+					" S.officeID = O.officeID AND s.serviceID = C.serviceID AND C.controlNumberID = ? AND" + 
+					" O.officeID = (SELECT officeID FROM forms WHERE formID = ? );";
 			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, controlNumberID);
+			statement.setInt(2, formID);
 			rs = statement.executeQuery();
 			
 			

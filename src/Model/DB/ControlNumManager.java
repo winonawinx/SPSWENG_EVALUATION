@@ -51,7 +51,7 @@ public class ControlNumManager {
 			
 			if (rs.next())
 			{
-				c =  new ControlNumber(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getTimestamp(4), rs.getBoolean(5));
+				c =  new ControlNumber(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getTimestamp(5), rs.getBoolean(6));
 				return c;
 			}
 			
@@ -79,7 +79,7 @@ public class ControlNumManager {
 			controlnumbers.clear();
 			while(rs.next())
 			{
-				ControlNumber c = new ControlNumber(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(4), rs.getBoolean(5));
+				ControlNumber c = new ControlNumber(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(5), rs.getBoolean(6));
 				controlnumbers.add(c);			
 			}
 						
@@ -211,7 +211,7 @@ public class ControlNumManager {
 			controlnumbers.clear();
 			if(rs.next())
 			{
-				controlNumber =  new ControlNumber(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(4), rs.getBoolean(5));
+				controlNumber =  new ControlNumber(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(5), rs.getBoolean(6));
 			}
 				
 						

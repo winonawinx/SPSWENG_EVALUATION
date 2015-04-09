@@ -21,7 +21,7 @@ public class DBConnection {
 		 url        = "jdbc:mysql://127.0.0.1:3306/";
 	     database   = "Evaluation";
 		 username   = "root";
-		 passwordDB   = "";
+		 passwordDB   = "goldenrayquaza12";
 	 }
 	 
 	 public static DBConnection getInstance() 
