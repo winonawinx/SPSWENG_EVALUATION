@@ -65,7 +65,7 @@ public class UserManager
 		return null;
 	}
 	
-	public ArrayList<User> getAllData() 
+	public Iterator<User> getAllData() 
 	{	
 		try 
 		{
@@ -87,7 +87,31 @@ public class UserManager
 			e.printStackTrace();
 		}
 		connect.close();
-		return users;
+		return users.iterator();
+	}
+	
+	public Iterator<User> getOfficeHead() 
+	{	
+		ArrayList<User> heads = new ArrayList<User>();
+		try 
+		{
+			String query = "SELECT * FROM Users WHERE type='officehead';";
+			statement = connect.getConnection().prepareStatement(query);
+			rs = statement.executeQuery();
+			while(rs.next())
+			{
+				User u = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getBoolean(7));
+
+				heads.add(u);			
+			}
+						
+		} 
+		catch (SQLException e) {
+			System.out.println("ERROR in getting all data from DB");
+			e.printStackTrace();
+		}
+		connect.close();
+		return heads.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
