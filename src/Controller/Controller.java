@@ -262,9 +262,9 @@ public class Controller {
 		cmm.insertData(comment);
 	}
 	
-	public Iterator<Comment> getServiceComments(int serviceid)
+	public Iterator<Comment> getServiceComments(int officeid, int serviceid)
 	{
-		return cmm.getServiceComments(serviceid);
+		return cmm.getServiceComments(officeid, serviceid);
 	}
 	
 	public int getFormID(int officeID)
