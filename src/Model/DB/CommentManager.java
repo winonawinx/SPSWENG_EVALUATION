@@ -151,13 +151,14 @@ public class CommentManager {
 		return comments.iterator();
 	}
 	
-	public Iterator<Comment> getServiceComments(int serviceid)
+	public Iterator<Comment> getServiceComments(int officeId, int serviceId)
 	{
 		try 
 		{
-			String query = "SELECT * FROM comments where controlnumberid IN (select controlnumberid from controlnumbers where formid = (SELECT formid from forms where serviceid = ?));";
+			String query = "SELECT * FROM comments where controlnumberid IN (select controlnumberid from controlnumbers where formid = (SELECT formid from forms where officeId = ?) && serviceId = ? && status = 1);";
 			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, serviceid);
+			statement.setInt(1, officeId);
+			statement.setInt(2, serviceId);
 			rs = statement.executeQuery();
 			
 			comments = new ArrayList<Comment>();

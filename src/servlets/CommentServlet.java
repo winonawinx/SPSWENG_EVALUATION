@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
 import Model.Comment;
+import Model.Office;
 import Model.Service;
 
 @WebServlet("/CommentServlet")
@@ -31,7 +32,7 @@ public class CommentServlet extends HttpServlet {
 		System.out.println("Pumasok sa commentservlet");
 		Controller controller = new Controller();
 		int serviceid = Integer.parseInt((String)request.getParameter("click"));
-		Iterator<Comment> comments = controller.getServiceComments(serviceid);
+		Iterator<Comment> comments = controller.getServiceComments(((Office)request.getSession().getAttribute("Office")).getID(), serviceid);
 		request.getSession().setAttribute("comments", comments);
 		Iterator<Service> services = (Iterator<Service>) request.getSession().getAttribute("Services");
 		while(services.hasNext())
