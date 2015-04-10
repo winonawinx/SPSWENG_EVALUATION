@@ -277,4 +277,32 @@ public class ControlNumManager {
 		return 0;
 	}
 	
+	public int getControlNumberID(String controlnumber)
+	{
+		try
+		{
+			ControlNumber c;
+			
+			String query = "SELECT controlNumberID FROM controlnumbers WHERE controlnumber = ? and status = '0';";	
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setString(1, controlnumber);
+			rs = statement.executeQuery();
+			
+			if (rs.next())
+			{
+				return rs.getInt(1);
+			}
+			
+			else 
+				return 0;
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to SELECT ControlNum");
+			e.printStackTrace();
+		}
+		
+		connect.close();
+		return 0;
+	}
 }

@@ -27,12 +27,12 @@ DROP TABLE IF EXISTS `answers`;
 CREATE TABLE `answers` (
   `questionId` int(11) NOT NULL,
   `controlNumberId` int(11) NOT NULL,
-  `answer` varchar(255) NOT NULL,
+  `answer` varchar(255) DEFAULT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   KEY `answersQuestionId_idx` (`questionId`),
   KEY `answerControlNumber_idx` (`controlNumberId`),
   CONSTRAINT `answersControlNumId` FOREIGN KEY (`controlNumberId`) REFERENCES `controlnumbers` (`controlNumberId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `answersQuestionId` FOREIGN KEY (`questionId`) REFERENCES `questions` (`questionId`)
+  CONSTRAINT `answersQuestionId` FOREIGN KEY (`questionId`) REFERENCES `questions` (`questionId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -239,12 +239,12 @@ public class FormManager
 			statement.setInt(2, formID);
 			rs = statement.executeQuery();
 			
-			
 			if(rs.next())
 			{
 				OfficeService = rs.getString(2) + " - " + rs.getString(1);
 			}
-			
+
+			System.out.println("lol: " + controlNumberID + " " + formID + " " + OfficeService);
 		} 
 		catch (SQLException e) {
 			System.out.println("ERROR in getting all data from DB");

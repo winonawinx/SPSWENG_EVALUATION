@@ -206,6 +206,11 @@ public class Controller {
 		return cm.getFormID(controlnumber);
 	}
 	
+	public int getControlNumberID(String controlnumber)
+	{
+		return cm.getControlNumberID(controlnumber);
+	}
+	
 	public Form getForm(int formID)
 	{
 		return fm.getData(formID);

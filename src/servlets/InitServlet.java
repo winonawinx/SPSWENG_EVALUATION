@@ -45,7 +45,8 @@ public class InitServlet extends HttpServlet {
 		
 		if(m.ControlNumberIsValid(cn))
 		{
-			request.getSession().setAttribute("OfficeService", m.getFormOfficeAndService(m.getControlNumberFormID(cn), m.getForm(m.getControlNumberFormID(cn)).getID()));
+			System.out.println("InitServlet: " + m.getControlNumber(cn) + " " +  m.getForm(m.getControlNumberFormID(cn)).getID());
+			request.getSession().setAttribute("OfficeService", m.getFormOfficeAndService(m.getControlNumberID(cn), m.getForm(m.getControlNumberFormID(cn)).getID()));
 			request.getSession().setAttribute("Form", m.getForm(m.getControlNumberFormID(cn)));
 			request.getSession().setAttribute("Control", cn);
 			response.sendRedirect("evaluationform.jsp");
