@@ -123,7 +123,10 @@ public class AnswerManager{
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, a.getQuestionID());
 			statement.setInt(2, a.getControlNumberID());
-			statement.setInt(3, a.getAnswer());
+			if(a.getAnswer() == 0)
+				statement.setNull(3, java.sql.Types.VARCHAR);
+			else
+				statement.setInt(3, a.getAnswer());
 			statement.setBoolean(4, a.getIsArchived());
 			statement.execute();
 			connect.close();
