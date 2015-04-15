@@ -279,7 +279,6 @@ private static OfficeManager oM = null;
 			e.printStackTrace();
 		}
 		connect.close();
-		System.out.println(id);
 		return id;
 	}
 	
@@ -346,7 +345,7 @@ private static OfficeManager oM = null;
 	{
 		try
 		{
-			System.out.println("Office selected in OfficeManager == " + office);
+		
 			Office o;
 			
 			String query = "SELECT officeID FROM Offices WHERE officeName = ?;";	

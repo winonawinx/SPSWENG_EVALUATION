@@ -109,7 +109,6 @@ public class FormManager
 			e.printStackTrace();
 		}
 		connect.close();
-		System.out.println(forms.get(0).getQuestions().size());
 		return forms.iterator();
 	}
 	
@@ -176,7 +175,6 @@ public class FormManager
 	public int getFormId(int officeId) 
 	{
 		try {
-			System.out.println(officeId);
 			String sql = "SELECT formId "
 					+ "FROM forms "
 					+ "WHERE officeId = " + officeId + " AND isArchived = 0;";
@@ -244,7 +242,6 @@ public class FormManager
 				OfficeService = rs.getString(2) + " - " + rs.getString(1);
 			}
 
-			System.out.println("lol: " + controlNumberID + " " + formID + " " + OfficeService);
 		} 
 		catch (SQLException e) {
 			System.out.println("ERROR in getting all data from DB");

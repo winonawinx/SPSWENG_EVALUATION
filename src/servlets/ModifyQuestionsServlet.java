@@ -51,12 +51,16 @@ public class ModifyQuestionsServlet extends HttpServlet {
 	    
 	    ArrayList<String> questionStrings = new ArrayList<String>();
 	    int number = Integer.parseInt((String)request.getParameter("numbah"));
-	    System.out.println("Number is " + number);
 	   
+	    String s = "";
 	    for(int x = 0; x < number; x++)
 	    {
-	    	questionStrings.add((String)request.getParameter("" + (x+1)));
-	    	System.out.println(questionStrings.get(questionStrings.size()-1));
+	    	s = (String)request.getParameter("q" + (x+1));
+	    
+	    	if(s != null)
+	    	{
+	    		questionStrings.add(s);
+	    	}
 	    }
 	    
 	    ArrayList<Question> questions = new ArrayList<Question>();
@@ -95,6 +99,8 @@ public class ModifyQuestionsServlet extends HttpServlet {
         	fcnt++;
         }
 	    con.addFormQuestions(questions,frm.getID());
+	    
+	    response.sendRedirect("adminmenu.jsp");
 	}
 
 }

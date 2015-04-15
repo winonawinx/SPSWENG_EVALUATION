@@ -139,7 +139,7 @@ CREATE TABLE `forms` (
   `formId` int(11) NOT NULL AUTO_INCREMENT,
   `officeId` int(11) NOT NULL,
   `startDate` date NOT NULL,
-  `endDate` date NOT NULL,
+  `endDate` date DEFAULT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`formId`),
   KEY `formsOfficeId_idx` (`officeId`),

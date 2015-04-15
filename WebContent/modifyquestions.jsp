@@ -79,7 +79,7 @@
             <form action = "ModifyQuestionsServlet" method = "post" id = "modifyQues" onSubmit = "return checkVal();">
             <h1 class="headerlabel">Edit Evaluation Form for <%=office %></h1>
             <div class="actualcontent">
-                <ol id="questionlist">
+                <ol id="questionlist" name = "questionlist">
                 	<%
                 		for(int x = 0; x < form.getQuestions().size(); x++)
                 		{
@@ -91,7 +91,7 @@
                 
                     <li id="<%=number%>">
                         <div class="form-group">
-                        	<select class = "form-control" id = "<%=qn%>" name = "<%=qn%>">
+                        	<select class = "form-control" id = "q<%=qn%>" name = "q<%=qn%>">
 		 					<option>  <%=form.getQuestions().get(x).getQuestion()%> </option>
 		 					<%for(int y = 0; y < questionsList.size(); y++)
 		 					{
@@ -104,7 +104,7 @@
 		 						{
 		 					%>
 			 					<option><%=ques.get(y)%></option>
-		 					<%} %>
+		 					<%	} %>
                         	</select>
                             <!-- <input type="text" class="form-control" id = "<%=form.getQuestions().get(x).getQuestion()%>" name = "<%=form.getQuestions().get(x).getQuestion()%>" value= "<%=form.getQuestions().get(x).getQuestion()%>"> -->
                             <button class="floatright deletequestionbtn" onClick="deleteQuestion(<%=number%>);"><img src="css/images/x-mark.png" height="20" width="20"></button>
@@ -115,7 +115,8 @@
 		        <input type = "hidden" name = "numbah" id = "numbah">
                 <div class="form-group">
                     <div>
-                        <button type="button" id="addquestionbtn" class="blackbtn" onClick="addQuestion();">+</button>
+<%--                         <button type="button" id="addquestionbtn" class="blackbtn" onClick="addQuestion(<%=number %>);">+</button> --%>
+                        <button type="button" id="addquestionbtn" class="blackbtn">+</button>
                     </div>
                     <div class="clearfloat"></div>
                     <div class="checkbox" style="margin-left:45px;">
@@ -140,27 +141,76 @@
                     </div>
                 </div>
                 <div align="right">
-                    <button type = "submit" class="blackbtn abtn" style ="font-size: 25px;" data-toggle="modal" onClick = "saveNum(<%=number%>);">Save</button>
-                    <a href="editoffices.html" class="blackbtn abtn" style ="font-size: 25px;">Cancel</a>
+                    <button type = "submit" class="blackbtn abtn" style ="font-size: 25px;" data-toggle="modal" onClick = "saveNum();">Save</button>
+                    <a href="editoffices.jsp" class="blackbtn abtn" style ="font-size: 25px;">Cancel</a>
                 </div>
             </div>
         </div>
         </form>
 
-        <script>
-            var nElemQuestion = 4;
-            function addQuestion()
+        <script type = "text/javascript">
+        	//var nElemQuestion = <%=number%>;
+        	
+        	/*function addQuestion(number)
             {
-            	<%number++;%>
-                $("#questionlist").append('<li id="question+nElemQuestion"><div class="form-group"><input type="text" class="form-control"><button class="floatright deletequestionbtn2" onClick="deleteQuestion(question+nElemQuestion);"><img src="css/images/x-mark.png" height="20" width="20"></button></div></li>'); 
-                nElemQuestion++;
-            }
+            	alert("pumasok sa addq " + number);
+        		//nElemQuestion = <%=number%>;
+				<%number++;%>
+            	//$("#questionlist").append('<li id="number"><div class="form-group"><input type="text" class="form-control"><button class="floatright deletequestionbtn2" onClick="deleteQuestion(question+nElemQuestion);"><img src="css/images/x-mark.png" height="20" width="20"></button></div></li>'); 
+                
+               	$("#questionlist").append('<li id="'+ number + '">');
+               	$("#questionlist").append('<div class="form-group">');
+               	$("#questionlist").append('<select class = "form-control" id = "'+number+'" name = "'+number+'">');
+               	<%for(int x = 0; x < questionsList.size(); x++)
+               	{
+               	%>
+                 		$("#questionlist").append('<option>' + <%=questionsList.get(x).getQuestion()%> + '</option>');               		
+               	<%}%>
+               	$("#questionlist").append('</select>');
+               	$("#questionlist").append('<button class="floatright deletequestionbtn" onClick="deleteQuestion('+number+');"><img src="css/images/x-mark.png" height="20" width="20"></button>');
+               	$("#questionlist").append('</div></li>');
+               	
+                //nElemQuestion++;
+            }*/
+            
+            
+            
+            $(document).ready(function()
+              		{
+              			$("#addquestionbtn").click(function()
+              			{
+              				$.ajax({
+              							type: "POST",
+              							url: "AddQuestionServlet",
+              							data: {"number": <%=number%>,
+              									"formforservlet": <%=form.getID()%>},
+              								error: function(data)
+              								{
+              									alert("ERROR: " + data);
+              								},
+              							success: function(data){
+              								$("#questionlist").append(data);
+              							}
+              				  });
+              				
+              				<%number++;%>
+              			});          
+              		});
+            
+            
+            
+            
+            
+            
+            
             
             function deleteQuestion(question)
             {
                 $("#"+question).remove();
-                <%number--;%>
-                nElemQuestion--;
+                <%number-=1;
+                System.out.println();
+                %>
+            	document.getElementById("numbah").value = <%=number%>;
             }
             
             var retValue = false;
@@ -193,10 +243,12 @@
         		}
         	}
             
-            function saveNum(number)
+            function saveNum()
             {
-            	document.getElementById("numbah").value = number;
+            	document.getElementById("numbah").value = <%=number%>;
             }
+            
+       
             
         </script>
     </body>
