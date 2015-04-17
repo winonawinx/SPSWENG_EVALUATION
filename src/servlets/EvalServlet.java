@@ -35,7 +35,7 @@ public class EvalServlet extends HttpServlet {
 		}
 		
 		m.insertComment(new Comment(controlnumber.getId(), (String)request.getParameter("Text1")));
-		m.updateControlNumber(new ControlNumber(controlnumber.getId(), controlnumber.getControlNumber(), f.getID(), controlnumber.getExpirationTime(), true));
+//		m.updateControlNumber(new ControlNumber(controlnumber.getId(), controlnumber.getControlNumber(), f.getID(), controlnumber.getExpirationTime(), true));
 	
 		response.sendRedirect("evaluatorlogin.jsp");
 	}

@@ -11,32 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Controller.Controller;
+import Model.ControlNumber;
+import Model.Form;
 
-/**
- * Servlet implementation class InitServlet
- */
 @WebServlet("/InitServlet")
 public class InitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public InitServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Controller m = new Controller();
 		String cn = request.getParameter("controlnumber");
@@ -45,10 +33,12 @@ public class InitServlet extends HttpServlet {
 		
 		if(m.ControlNumberIsValid(cn))
 		{
-			System.out.println("InitServlet: " + m.getControlNumber(cn) + " " +  m.getForm(m.getControlNumberFormID(cn)).getID());
 			request.getSession().setAttribute("OfficeService", m.getFormOfficeAndService(m.getControlNumberID(cn), m.getForm(m.getControlNumberFormID(cn)).getID()));
 			request.getSession().setAttribute("Form", m.getForm(m.getControlNumberFormID(cn)));
 			request.getSession().setAttribute("Control", cn);
+			ControlNumber controlnumber = m.getControlNumber(cn);
+			Form f =  m.getForm(m.getControlNumberFormID(cn));
+			m.updateControlNumber(new ControlNumber(controlnumber.getId(), controlnumber.getControlNumber(), f.getID(), controlnumber.getExpirationTime(), true));
 			response.sendRedirect("evaluationform.jsp");
 		}
 		else  

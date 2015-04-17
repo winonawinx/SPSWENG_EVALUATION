@@ -29,11 +29,12 @@
 	      {
 	          office = cookie.getValue();
 	      }
-	     }
+	    }
 	       
 	    Office o = con.getOfficeByName(office);
 	    int formID = con.getFormID(o.getID());
 	    Form form = con.getForm(formID);
+		session.setAttribute("currentform", form);
 	    Iterator<Question> iterator = con.getAllQuestions();
 	    ArrayList<Question> questionsList = new ArrayList<Question>();
 	    while(iterator.hasNext())
@@ -122,10 +123,12 @@
                     <div class="checkbox" style="margin-left:45px;">
                         <div class="row">
                             <div class="col-xs-6">
-                                <label class="checkbox-label"><input type="checkbox">Comments</label>
+                                <label class="checkbox-label"><input type="checkbox" id = "commentscb" name = "commentscb">Comments</label>
+                                <input type = "hidden" name = "checkedComments" id = "checkedComments" value = "false">
                             </div>
                             <div class="col-xs-6">
-                                <label class="checkbox-label"><input type="checkbox">End Date</label>
+                                <label class="checkbox-label"><input type="checkbox" id = "enddatecb" name = "enddatecb" onclick = "toggleCheckedEndDate(this);">End Date</label>
+                                <input type = "hidden" name = "checkedEndDate" id = "checkedEndDate" value = "false">
                             </div>
                         </div>
                     </div>
@@ -195,7 +198,7 @@
               				
               				<%number++;%>
               			});          
-              		});
+              		              		});
             
             
             
@@ -248,7 +251,15 @@
             	document.getElementById("numbah").value = <%=number%>;
             }
             
-       
+            function toggleCheckedEndDate(element)
+            {
+	            	document.getElementById("checkedEndDate").value = element.checked;
+            }
+            
+            function toggleCheckedComments(element)
+            {
+	            	document.getElementById("checkedComments").value = element.checked;
+            }
             
         </script>
     </body>

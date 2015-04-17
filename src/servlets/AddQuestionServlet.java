@@ -27,8 +27,7 @@ public class AddQuestionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 			Controller c = new Controller();
-		
-		  
+			
 		   int number = Integer.parseInt(request.getParameter("number"));
 		   int formid = Integer.parseInt(request.getParameter("formforservlet"));
 		   Iterator<Question> iterator = c.getAllQuestions();

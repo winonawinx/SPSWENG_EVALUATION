@@ -48,7 +48,6 @@ public class ModifyQuestionsServlet extends HttpServlet {
 	    Office o = con.getOfficeByName(office);
 	    int formID = con.getFormID(o.getID());
 	    Form form = con.getForm(formID);
-	    
 	    ArrayList<String> questionStrings = new ArrayList<String>();
 	    int number = Integer.parseInt((String)request.getParameter("numbah"));
 	   
@@ -89,17 +88,36 @@ public class ModifyQuestionsServlet extends HttpServlet {
         java.sql.Date sql2 = new java.sql.Date(parsed2.getTime());
 	    
         
-        con.addForm(-1, o.getID(), sql, sql2, true);
-        Iterator<Form> i = con.getAllForms();
-        int fcnt = 0;
-        Form frm = null;
-        while(i.hasNext())
+        if(form.getEndDate()== null)
         {
-        	frm = i.next();
-        	fcnt++;
+        	form.setEndDate(sql);
         }
-	    con.addFormQuestions(questions,frm.getID());
-	    
+        if(request.getParameter("checkedEndDate").equals("true"))
+        {
+	        con.addForm(-1, o.getID(), sql, sql2, true);
+	        Iterator<Form> i = con.getAllForms();
+	        int fcnt = 0;
+	        Form frm = null;
+	        while(i.hasNext())
+	        {
+	        	frm = i.next();
+	        	fcnt++;
+	        }
+		    con.addFormQuestions(questions,frm.getID());
+        }
+        else
+        {
+        	con.addForm(-1, o.getID(), sql, null, true);
+	        Iterator<Form> i = con.getAllForms();
+	        int fcnt = 0;
+	        Form frm = null;
+	        while(i.hasNext())
+	        {
+	        	frm = i.next();
+	        	fcnt++;
+	        }
+		    con.addFormQuestions(questions,frm.getID());
+        }
 	    response.sendRedirect("adminmenu.jsp");
 	}
 
