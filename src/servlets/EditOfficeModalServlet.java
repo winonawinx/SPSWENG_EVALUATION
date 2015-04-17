@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
 import Model.Office;
+import Model.DB.OfficeManager;
 
 @WebServlet("/EditOfficeModalServlet")
 public class EditOfficeModalServlet extends HttpServlet {
@@ -27,24 +28,9 @@ public class EditOfficeModalServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Controller controller = new Controller();
-		String clicked = (String) request.getParameter("mhidden");
-		response.addCookie(new Cookie("Office", (String) request.getParameter("ofcName")));
-		
-		if(clicked.equals("Edit Form"))
-		{
-			Office office = null;
-	    	Cookie[] cookies = request.getCookies();
-	        for(Cookie cookie:cookies){
-	           if(cookie.getName().equals("Office")){
-	        	   System.out.println("Cookie is " + cookie.getValue());
-	              office = controller.getOfficeByName(cookie.getValue());
-	           }
-	       }
-	        
-			response.sendRedirect("modifyquestions.jsp");
-		}	
-		
+		OfficeManager om = new OfficeManager();
+		int officeId = Integer.valueOf(request.getParameter("officeId"));
+		String officeName = request.getParameter("officeName");
+		om.editOffice(officeId, officeName);
 	}
-
 }
