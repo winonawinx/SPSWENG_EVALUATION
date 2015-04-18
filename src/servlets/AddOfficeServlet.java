@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Controller.Controller;
 import Model.DB.OfficeManager;
 
 @WebServlet("/AddOfficeServlet")
@@ -23,12 +24,14 @@ public class AddOfficeServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Controller con = new Controller();
 		OfficeManager om = new OfficeManager();
 		int userId = Integer.valueOf((String)request.getParameter("heads"));
 		String officeName = (String) request.getParameter("officeName");
 		int officeId = om.addOffice(officeName);
 		om.setOfficeHead(userId, officeId);
-		response.sendRedirect("addoffice.jsp");
+		request.getSession().setAttribute("Office", con.getOffice(officeId));
+		response.sendRedirect("createform.jsp");
 	}
 
 }

@@ -29,7 +29,6 @@ public class AddQuestionServlet extends HttpServlet {
 			Controller c = new Controller();
 			
 		   int number = Integer.parseInt(request.getParameter("number"));
-		   int formid = Integer.parseInt(request.getParameter("formforservlet"));
 		   Iterator<Question> iterator = c.getAllQuestions();
 		   ArrayList<Question> questions = new ArrayList<Question>();
 		   while(iterator.hasNext())

@@ -255,7 +255,7 @@ public class FormManager
 	{
 		try
 		{
-			String query = "INSERT INTO formquestions values(?,?,'1')";
+			String query = "INSERT INTO formquestions values(?,?,'0')";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, formID);
 			statement.setInt(2, id);

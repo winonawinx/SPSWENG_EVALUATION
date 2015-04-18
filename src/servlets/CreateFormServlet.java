@@ -1,13 +1,10 @@
 package servlets;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +18,11 @@ import Model.Form;
 import Model.Office;
 import Model.Question;
 
-@WebServlet("/ModifyQuestionsServlet")
-public class ModifyQuestionsServlet extends HttpServlet {
+@WebServlet("/CreateFormServlet")
+public class CreateFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public ModifyQuestionsServlet() {
+    public CreateFormServlet() {
         super();
     }
 
@@ -35,26 +32,15 @@ public class ModifyQuestionsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		Controller con = new Controller();
-        String office = null;
-    	Cookie[] cookies = request.getCookies();
-	    for(Cookie cookie:cookies)
-	    {
-	      if(cookie.getName().equals("Office"))
-	      {
-	          office = cookie.getValue();
-	      }
-	    }
 
-	    Office o = con.getOfficeByName(office);
-	    int formID = con.getFormID(o.getID());
-	    Form form = con.getForm(formID);
+	    Office o = (Office)request.getSession().getAttribute("Office");
 	    ArrayList<String> questionStrings = new ArrayList<String>();
 	    int number = Integer.parseInt((String)request.getParameter("numbah"));
 	   
 	    String s = "";
 	    for(int x = 0; x < number; x++)
 	    {
-	    	s = (String)request.getParameter("q" + (x+1));
+	    	s = (String)request.getParameter("q" + (x));
 	    
 	    	if(s != null)
 	    	{
@@ -63,10 +49,12 @@ public class ModifyQuestionsServlet extends HttpServlet {
 	    }
 	    
 	    ArrayList<Question> questions = new ArrayList<Question>();
+	    
 	    for(int x = 0; x < questionStrings.size(); x++)
 	    {
 	    	questions.add(con.getQuestion(questionStrings.get(x)));
 	    }
+	    
 	    String startdate = (String)request.getParameter("startdate");
 	    SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
         java.util.Date parsed = null;
@@ -77,15 +65,10 @@ public class ModifyQuestionsServlet extends HttpServlet {
 		}
 		
         java.sql.Date sql = new java.sql.Date(parsed.getTime());
-
-        if(form.getEndDate()== null)
-        {
-        	form.setEndDate(sql);
-        }
+        
         if(request.getParameter("checkedEndDate").equals("true"))
         {
-    	    
-            String enddate = (String)request.getParameter("enddate");
+        	String enddate = (String)request.getParameter("enddate");
     	    java.util.Date parsed2 = null;
     		try {
     			parsed2 = (java.util.Date) format.parse(enddate);
@@ -93,7 +76,7 @@ public class ModifyQuestionsServlet extends HttpServlet {
     			e.printStackTrace();
     		}
             java.sql.Date sql2 = new java.sql.Date(parsed2.getTime());
-    	    
+        	
 	        con.addForm(-1, o.getID(), sql, sql2, true);
 	        Iterator<Form> i = con.getAllForms();
 	        int fcnt = 0;
@@ -107,6 +90,7 @@ public class ModifyQuestionsServlet extends HttpServlet {
         }
         else
         {
+            
         	con.addForm(-1, o.getID(), sql, null, true);
 	        Iterator<Form> i = con.getAllForms();
 	        int fcnt = 0;
@@ -118,7 +102,6 @@ public class ModifyQuestionsServlet extends HttpServlet {
 	        }
 		    con.addFormQuestions(questions,frm.getID());
         }
-	    response.sendRedirect("adminmenu.jsp");
+	    response.sendRedirect("editoffices.jsp");
 	}
-
 }
