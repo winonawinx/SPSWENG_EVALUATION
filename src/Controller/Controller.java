@@ -302,4 +302,9 @@ public class Controller {
 	{
 		return sm.getService(serviceId);
 	}
+	
+	public boolean removeQuestion(Question question, boolean isArchived)
+	{
+		return qm.removeData(question, isArchived);
+	}
 }

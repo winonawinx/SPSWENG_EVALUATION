@@ -179,7 +179,7 @@
             
             
             $(document).ready(function()
-              		{
+            {
               			$("#addquestionbtn").click(function()
               			{
               				$.ajax({
@@ -195,10 +195,10 @@
               								$("#questionlist").append(data);
               							}
               				  });
-              				
+              				alert("num is " + <%=number%>);
               				<%number++;%>
               			});          
-              		              		});
+              });
             
             
             

@@ -118,11 +118,10 @@ public class QuestionManager
 		try
 		{
 			Question q = (Question) obj;
-			String query = "INSERT INTO questions values(?,?,?)";
+			String query = "INSERT INTO questions values(DEFAULT,?,?)";
 			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, q.getID());
-			statement.setString(2, q.getQuestion());
-			statement.setBoolean(3, q.getIsArchived());
+			statement.setString(1, q.getQuestion());
+			statement.setBoolean(2, q.getIsArchived());
 			statement.execute();
 			//notifyObserver();
 			connect.close();
@@ -176,4 +175,29 @@ public class QuestionManager
 		return list.iterator();
 		
 	}
+	
+	public boolean removeData(Object obj, boolean isArchived)
+	{
+		Question q = (Question) obj;
+		
+		String query = "UPDATE questions SET isArchived = ? WHERE QuestionID = ?";
+		try 
+		{
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setBoolean(1, isArchived);
+			statement.setInt(2, q.getID());
+			statement.execute();
+			//notifyObserver();
+			connect.close();
+			return true;
+			
+		} catch (SQLException a) {
+	
+			System.out.println("Update Error");
+			a.printStackTrace();
+		}
+		connect.close();
+		return false;
+	}
+	
 }
