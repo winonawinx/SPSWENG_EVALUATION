@@ -29,7 +29,7 @@
                         <button type="submit" id = "vq" name = "vq" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Add Questions">Add Questions</button>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id = "vdq" name = "vdq" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Delete Questions">Delete Questions</button>
+                        <button type="submit" id = "vdq" name = "vdq" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Remove Questions">Remove Questions</button>
                     </div>
                     <div class="form-group">
                         <button type="submit" id = "pl" name = "pl" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Sign Out">Sign Out</button>

@@ -33,6 +33,9 @@ public class AdminMenuServlet extends HttpServlet {
 			response.sendRedirect("addUser.jsp");
 		if(clicked.equals("Add Questions"))
 			response.sendRedirect("addQuestions.jsp");
+		if(clicked.equals("Remove Questions"))
+			response.sendRedirect("deleteQuestions.jsp");
+
 	}
 
 }
