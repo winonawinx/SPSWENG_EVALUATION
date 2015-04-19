@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.servlet.ServletException;
@@ -9,10 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import Controller.Controller;
 import Model.Comment;
 import Model.Office;
 import Model.Service;
+import Model.DB.CommentManager;
 
 @WebServlet("/CommentServlet")
 public class CommentServlet extends HttpServlet {
@@ -30,17 +35,23 @@ public class CommentServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		System.out.println("Pumasok sa commentservlet");
-		Controller controller = new Controller();
-		int serviceid = Integer.parseInt((String)request.getParameter("click"));
-		Iterator<Comment> comments = controller.getServiceComments(((Office)request.getSession().getAttribute("Office")).getID(), serviceid);
-		request.getSession().setAttribute("comments", comments);
-		Iterator<Service> services = (Iterator<Service>) request.getSession().getAttribute("Services");
-		while(services.hasNext())
-		{
-			System.out.println("In comment servlet " + services.next().getName());
+		CommentManager cm = new CommentManager();
+		PrintWriter out = response.getWriter();
+		JSONObject json = new JSONObject();
+		JSONArray  jsonComments = new JSONArray();
+		JSONObject comment;
+		int serviceid = Integer.parseInt((String)request.getParameter("serviceId"));
+		Iterator<Comment> comments =cm.getServiceComments(((Office)request.getSession().getAttribute("Office")).getID(), serviceid);
+
+		while(comments.hasNext()) {
+			comment = new JSONObject();
+			comment.put("comment", comments.next().getComment());
+			jsonComments.add(comment);
 		}
-		request.getSession().setAttribute("Services", services);
-		response.sendRedirect("comments.jsp");
+		json.put("Comments", jsonComments);
+		
+		response.setContentType("application/json");
+		out.print(json.toString());
 	}
 
 }
