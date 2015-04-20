@@ -9,9 +9,9 @@ public class User
 	private String email;
 	private String password;
 	private String type;
-	private Boolean isArchived;
+	private boolean isArchived;
 	
-	public User(int ID, String username, String title, String email, String password, String type, Boolean isArchived)
+	public User(int ID, String username, String title, String email, String password, String type, boolean isArchived)
 	{
 		setID(ID);
 		setUsername(username);

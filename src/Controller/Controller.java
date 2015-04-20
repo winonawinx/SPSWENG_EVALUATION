@@ -307,4 +307,9 @@ public class Controller {
 	{
 		return qm.removeData(question, isArchived);
 	}
+	
+	public void updateUser(User user)
+	{
+		um.updateData(user);
+	}
 }
