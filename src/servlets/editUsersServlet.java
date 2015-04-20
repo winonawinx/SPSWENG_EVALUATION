@@ -25,17 +25,20 @@ public class editUsersServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		Controller con = new Controller();
+		int userId = Integer.parseInt(request.getParameter("userId"));
+		String userName = request.getParameter("userName");
+		String userTitle = request.getParameter("userTitle");
+		String userEmail = request.getParameter("userEmail");
+		String userPassword = request.getParameter("userPassword");
+		String userType = request.getParameter("userType");
+		System.out.println("ID = " + request.getParameter("userId"));
+		System.out.println("un = " +  request.getParameter("userName")); 
+		System.out.println("title = " +	request.getParameter("userTitle")); 
+		System.out.println("email = " + request.getParameter("userEmail"));
+		System.out.println("pw = " + request.getParameter("userPassword"));
+		System.out.println("type = " + request.getParameter("userType"));
 		
-		System.out.println("ID = " + Integer.parseInt(request.getParameter("modalid")));
-		System.out.println("un = " +  request.getParameter("modalusername")); 
-		System.out.println("title = " +	request.getParameter("modaltitle")); 
-		System.out.println("email = " + request.getParameter("modalemail"));
-		System.out.println("pw = " + request.getParameter("modalpassword"));
-		System.out.println("type = " + request.getParameter("modaltype"));
-		
-		con.updateUser(new User(Integer.parseInt(request.getParameter("modalid")), request.getParameter("modalusername"), request.getParameter("modaltitle"), request.getParameter("modalemail"), request.getParameter("modalpassword"), request.getParameter("modaltype"), false));		
-	
-		response.sendRedirect("viewUsers.jsp");
+		con.updateUser(new User(userId, userName, userTitle, userEmail, userPassword, userType, false));		
 	}
 
 }

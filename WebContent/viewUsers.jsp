@@ -21,7 +21,6 @@
     	%>
         
         <!-- Modal HTML -->
-        <form action = "editUsersServlet" method = "post">
         <div id="editUserModal" class="modal fade my-modal">
             <div class="modal-dialog my-modal-dialog">
                 <div class="modal-content my-modal-content">
@@ -30,9 +29,6 @@
                         <h2 class="modal-title">Edit User</h2>
                     </div>
                     <div class="modal-body my-modal-body">
-                  		<input type = "hidden" name = "modalid" id = "modalid">
-			            <input type = "hidden" name = "modaltitle" id = "modaltitle">
-			            <input type = "hidden" name = "modalemail" id = "modalemail">
                     
                         <div class="form-group control-group">
                             <label class="col-xs-12 addlabel control-label">Name </label>
@@ -40,7 +36,7 @@
                         </div>
                         <div class="form-group control-group">
                             <label class="col-xs-12 addlabel control-label">Password </label>
-                            <input type="password" class="form-control" is = "modalpassword" name = "modalpassword">
+                            <input type="password" class="form-control" id = "modalpassword" name = "modalpassword">
                         </div>
                         <div class="form-group control-group">
                             <label class="col-xs-12 addlabel control-label">Type </label>
@@ -52,15 +48,14 @@
                         </div>
    			            <div class="form-group clearfloat"></div>
                         <div class="floatright">
-                            <button type="submit" class="blackbtn">Save</button>
+                            <button type="button" class="blackbtn" onclick="save()">Save</button>
                             <button type="button" class="blackbtn" data-dismiss="modal">Cancel</button>
-                            <button type="button" id = "removeofficebtn" class="blackbtn" onClick="">Remove</button>   
+                            <button type="button" id="removeofficebtn" class="blackbtn" onClick="removeUser()">Remove</button>   
                         </div>
                         <div class="clearfloat"></div>
                     </div>
                 </div>
-            </div>	
-            </form>
+            </div>
         </div>
         
         <div class="centerdiv">
@@ -73,24 +68,15 @@
                <form action = "" method = "post" onSubmit = "return ShowUserModal();">
                 <div class="row">
                 	<%
-                	int number = 0;
                 	while(iterator.hasNext())
                 	{
                 		User user = (User) iterator.next();
                 	%>
                     <div class="col-xs-4">
-                        <button type="submit" class="blackbtn viewabtn view" onclick = "press(<%=number%>);"><%=user.getUsername() %></button>
+                        <button type="submit" class="blackbtn viewabtn view" onclick="press('<%= user.getID()%>', '<%=user.getTitle()%>', '<%=user.getEmail()%>', '<%=user.getUsername()%>');"><%= user.getUsername() %></button>
                     </div>
-                    <input type = "hidden" name = "unh<%=number %>" id = "unh<%=number %>" value = "<%=user.getUsername()%>">
-                    <input type = "hidden" name = "pwh<%=number %>" id = "pwh<%=number %>" value = "<%=user.getPassword()%>">
-                    <input type = "hidden" name = "th<%=number %>" id = "th<%=number %>" value = "<%=user.getType()%>">
-                    <input type = "hidden" name = "idh<%=number %>" id = "idh<%=number %>" value = "<%=user.getID() %>">
-                    <input type = "hidden" name = "tih<%=number %>" id = "tih<%=number %>" value = "<%=user.getTitle() %>">
-                    <input type = "hidden" name = "eh<%=number %>" id = "eh<%=number %>" value = "<%=user.getEmail() %>">
                     
-                    <%
-                    number++;
-                	} %>
+                    <%}%>
                     <div class="col-xs-4">
                         <a href="addUser.jsp" type="button" class="blackbtn viewabtn view"> + Add User </a>
                     </div>
@@ -103,20 +89,74 @@
     
     
     <script>
+    	var currId;
+    	var currTitle;
+    	var currEmail;
+    	function save() {
+    		var edittedPW = document.getElementById('modalpassword').value;
+    		var edittedUN = document.getElementById('modalusername').value;
+    		var edittedType = document.getElementById('modaltype').value;
+    		$.ajax({
+    			type: 'POST',
+    			url : 'editUsersServlet',
+    			data : {"userId": currId,
+    					"userTitle": currTitle,
+    					"userEmail": currEmail,
+    					"userPassword": edittedPW,
+    					"userName": edittedUN,
+    					"userType": edittedType},
+    			error : function(data) {
+    				alert('error');
+    			},
+    			success : function(data) {
+    				alert('successfully editted!');
+    				location.reload();
+    			}
+    		});
+    	}
+    	function removeUser() {
+    		$.ajax({
+    			type: 'POST',
+    			url : 'RemoveUserServlet',
+    			data : {"userId": currId},
+    			error : function(data) {
+    				alert(data.responseText);
+    			},
+    			success : function(data) {
+    				alert('successfully editted!');
+    				location.reload();
+    			}
+    		});
+    	}
+    	
+    	//function removeUser() {
+    		//$.ajax({
+    			//type: 'POST',
+    	//		url : 'RemoveUserServlet',
+    		//	data : {"userId": currId},
+    			//error : function(data) {
+    	//			alert(currId)
+    		//		alert(data.responseText);
+    			//},
+    			//success : function(data) {
+    			//	alert('successfully removed!');
+    				//location.reload();
+    	//		}
+    	//	});
+    	//}
     	function ShowUserModal()
     	{
     		$('#editUserModal').modal('show');
     		return false;
     	}
-    	function press(element)
+    	function press(userId, userTitle, userEmail, userName)
      	{
-				document.getElementById("modalusername").value = document.getElementById("unh"+element).value;
-				document.getElementById("modalpassword").value = document.getElementById("pwh"+element).value;
-				document.getElementById("modalid").value = document.getElementById("idh"+element).value;
-				document.getElementById("modaltitle").value = document.getElementById("tih"+element).value;
-				document.getElementById("modalemail").value = document.getElementById("eh"+element).value;
+    			
+				currId = userId;
+				currTitle = userTitle;
+				currEmail = userEmail
+				document.getElementById('modalusername').value = userName;
      	}
      	
     </script>
-    
 </html>

@@ -30,9 +30,10 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("UN " + request.getParameter("email"));
 		System.out.println("PW " + request.getParameter("password"));
 		User user = m.getUser(request.getParameter("email"), request.getParameter("password"));
-		response.addCookie(new Cookie("user", user.getEmail()));
+		
 		if(user != null)
 		{
+			response.addCookie(new Cookie("user", user.getEmail()));
 			if(user.getType().equals("administrator"))
 				response.sendRedirect("adminmenu.jsp");
 			if(user.getType().equals("service personnel"))

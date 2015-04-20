@@ -18,20 +18,6 @@
 
 	var currId;
 	var currName;
-	$('#editformbtn').click(function() {
-		alert("hi");
-		$.ajax({
-			type: 'POST',
-			url : 'EditOfficeModalServlet',
-			data : {"officeId": currId},
-			error : function(data) {
-				alert('error');
-			},
-			success : function(data) {
-				alert('success');
-			}
-		});
-	});
 	function showOfficeModal() {
 		$('#editOfficeModal').modal('show');
 		document.getElementById("ofcName").value = currName;
