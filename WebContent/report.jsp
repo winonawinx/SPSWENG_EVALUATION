@@ -20,18 +20,23 @@
         <%
              	Controller m = new Controller();
         		Office o = null;
-              	//Office o = (Office) session.getAttribute("Office");
               	Cookie[] cookies = request.getCookies();
                 for(Cookie cookie:cookies){
                     if(cookie.getName().equals("Office")){
                        o = m.getOffice(Integer.parseInt(cookie.getValue()));
                     }
                 }
-             	//session.setAttribute("Office", o);
               	Iterator<Question> aQ = (Iterator<Question>) session.getAttribute("Questions");
         %>
+        
         <div class = "centerdiv">
-            <h1 class="headerlabel"><%=o.getName()%> Report</h1>
+            <form action = "OfficeHeadBackServlet" method = "post">
+            <h1 class="headerlabel"><%=o.getName()%> Report
+             	<div class = "floatright headermenu">
+                   <button type = "submit" class="blackbtn abtn headermenubtn" value = "Back">Back</button>
+                </div>
+            </h1>
+            </form>
             <div class="actualcontent">
                 <table class="table" id="report">
                     <thead>

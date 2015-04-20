@@ -12,7 +12,11 @@
     </head>
     <body>
         <div class="centerdiv">
-            <h1 class="headerlabel">Add User</h1>
+            <h1 class="headerlabel">Add User
+                <div class="floatright headermenu">
+                    <a href = "adminmenu.jsp" type="button" class="blackbtn abtn headermenubtn" id = "Backbtn" name = "Backbtn" value = "Back">Back</a>
+                </div>
+            </h1>
             <div id="addoffice" class="contentdiv small">
                 <form>
                     <div class="form-horizontal row" style="margin-top:40px;"> 

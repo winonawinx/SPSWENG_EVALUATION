@@ -10,31 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
-import Model.Office;
 
-/**
- * Servlet implementation class ReportServlet
- */
-@WebServlet("/ReportServlet")
-public class ReportServlet extends HttpServlet {
+@WebServlet("/BackToReportServlet")
+public class BackToReportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	int office = 0;
-    
-    public ReportServlet() {
+       
+    public BackToReportServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		response.sendRedirect("personnellogin.jsp");
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		Controller m = new Controller();
-		office = Integer.parseInt((String) request.getParameter("answer"));
-		request.getSession().setAttribute("Office", m.getOffice(office));
-		Cookie ofc = new Cookie("Office", String.valueOf(office));
-        response.addCookie(ofc);
+		int office = -1;
+    	Cookie[] cookies = request.getCookies();
+       	for(Cookie cookie:cookies){
+           	if(cookie.getName().equals("Office")){
+              	office = Integer.parseInt((cookie.getValue()));
+           	}
+       	}
 		request.getSession().setAttribute("Questions", m.getOfficeQuestions(office));
 		response.sendRedirect("report.jsp");
 	}

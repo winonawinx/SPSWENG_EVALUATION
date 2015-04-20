@@ -44,7 +44,7 @@ public class ControlNumManager {
 		{
 			ControlNumber c;
 			
-			String query = "SELECT * FROM controlnumbers WHERE controlnumber = ? and status = '0';";	
+			String query = "SELECT * FROM controlnumbers WHERE controlnumber = ?;";	
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setString(1, controlnumber);
 			rs = statement.executeQuery();

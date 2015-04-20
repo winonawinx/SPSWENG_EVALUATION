@@ -48,7 +48,11 @@
               
         <div class="centerdiv">
             <form action = "DeleteQuestionsServlet" method = "post" id = "modifyQues" onSubmit = "return checkVal();">
-            <h1 class="headerlabel">Remove Questions</h1>
+            <h1 class="headerlabel">Remove Questions
+                <div class="floatright headermenu">
+                    <a href = "adminmenu.jsp" type="button" class="blackbtn abtn headermenubtn" id = "Backbtn" name = "Backbtn" value = "Back">Back</a>
+                </div>
+            </h1>
             <div class="actualcontent">
                 <div class="clearfloat"></div>
                     <div class="checkbox" style="margin-left:45px;">

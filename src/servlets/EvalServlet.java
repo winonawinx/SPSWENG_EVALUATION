@@ -31,6 +31,9 @@ public class EvalServlet extends HttpServlet {
 	
 		for(int x = 0; x < f.getQuestions().size(); x++)
 		{
+			System.out.println("a " + f.getQuestions().get(x).getID());
+			System.out.println("b " + controlnumber.getId());
+			System.out.println("c " + Integer.parseInt((String)request.getParameter("answer"+x)));
 			m.addAnswer(f.getQuestions().get(x).getID(), controlnumber.getId(), Integer.parseInt((String)request.getParameter("answer"+x)), false);
 		}
 		

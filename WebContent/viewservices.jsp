@@ -16,20 +16,7 @@
     </head>
     <body>
         <%
-        /*Controller controller = new Controller();
-		Office office = null;
-    	Cookie[] cookies = request.getCookies();
-        for(Cookie cookie:cookies){
-           if(cookie.getName().equals("Office")){
-        	   System.out.println("Cookie is " + cookie.getValue());
-              office = controller.getOfficeByName(cookie.getValue());
-           }
-       }
-        
-		Iterator<Service> services = controller.getOfficeServices(office.getID());*/
-		
 		Iterator<Service> services = (Iterator<Service>)session.getAttribute("Services");
-        
         %>
         <!-- Modal HTML -->
         <form action = "EditServiceModalServlet" method = "post">
@@ -59,13 +46,15 @@
         </div>
         </form>
 
- 		<form action = "" method = "" onSubmit = "return showServiceModal();">
-        <div class="centerdiv">
+      	<div class="centerdiv">
+        <form action = "EditOfficesBackServlet" method = "post">
             <h1 class="headerlabel">Services
                 <div class="floatright headermenu">
-                    <a href="viewoffices.html" type="button" class="blackbtn abtn headermenubtn">Back</a>
+                    <button type="submit" class="blackbtn abtn headermenubtn" id = "Backbtn" name = "Backbtn" value = "Back">Back</a>
                 </div>
             </h1>
+            </form>
+            <form action = "" method = "" onSubmit = "return showServiceModal();">
             <div class="contentdiv">
                 <div class="row">
                     <%

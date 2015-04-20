@@ -20,13 +20,15 @@
     
     <body>
         <div class="centerdiv">
-        <form action = "ReportServlet" method = "post">
+            <form action = "ReportServlet" method = "get">
             <h1 class="headerlabel">View Offices
-                <div class="floatright headermenu">
-                    <button type="submit" class="blackbtn abtn headermenubtn" value = "Back">Back</button>
-                    <input type = "hidden" name = "answer" id = "answer">
+            	<div class = "floatright headermenu">
+                   <button type = "submit" class="blackbtn abtn headermenubtn" value = "Logout">Logout</button>
                 </div>
             </h1>
+            </form>
+            <form action = "ReportServlet" method = "post">
+            <input type = "hidden" name = "answer" id = "answer">
             <div class="contentdiv">
                 <div class="row">
                    

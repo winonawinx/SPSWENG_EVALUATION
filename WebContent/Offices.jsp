@@ -24,7 +24,7 @@
             <h1 class="headerlabel">View Offices
                 <div class="floatright headermenu">
                     <button type="submit" class="blackbtn abtn headermenubtn" id = "Editbtn" name = "Editbtn" value = "Edit" onClick = "menu(this);">Edit</button>
-                    <button type="submit" class="blackbtn abtn headermenubtn" value = "Back">Back</button>
+                    <button type="submit" class="blackbtn abtn headermenubtn" id = "Backbtn" name = "Backbtn" value = "Back" onClick = "menu(this);">Back</button>
                     <input type = "hidden" name = "pindot" id = "pindot">
                 </div>
             </h1>

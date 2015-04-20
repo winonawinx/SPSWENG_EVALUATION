@@ -39,7 +39,11 @@
               
         <div class="centerdiv">
             <form action = "AddNewQuestionsServlet" method = "post" id = "modifyQues" onSubmit = "return checkVal();">
-            <h1 class="headerlabel">Add Questions</h1>
+            <h1 class="headerlabel">Add Questions
+                <div class="floatright headermenu">
+                    <a href = "adminmenu.jsp" type="button" class="blackbtn abtn headermenubtn" id = "Backbtn" name = "Backbtn" value = "Back">Back</a>
+                </div>           
+            </h1>
             <div class="actualcontent">
                 <ol id="questionlist" name = "questionlist">
                     <li id="0">

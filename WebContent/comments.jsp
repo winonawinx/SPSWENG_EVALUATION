@@ -24,7 +24,6 @@
 <body>
 	<%
 		Controller m = new Controller();
-	        	//Office office = (Office) session.getAttribute("Office");
 		      	Office office = null;
 	        	Cookie[] cookies = request.getCookies();
 		       	for(Cookie cookie:cookies){
@@ -32,17 +31,17 @@
 		              	office = m.getOffice(Integer.parseInt(cookie.getValue()));
 		           	}
 		       	}
-		     	//session.setAttribute("Office", office);
 	        	Iterator services = m.getOfficeServices(office.getID());
 	        	session.setAttribute("Services", services);
 	%>
 	<div class="centerdiv">
 		<h1 class="headerlabel">
 			View Comments
+			<form action = "BackToReportServlet" method = "post">
 			<div class="floatright headermenu">
-				<a href="report.jsp" type="button"
-					class="blackbtn abtn headermenubtn">Back</a>
+				<button type = "submit" class="blackbtn abtn headermenubtn">Back</button>
 			</div>
+			</form>
 		</h1>
 		<div class="actualcontent">
 			<div class="row">
@@ -76,9 +75,9 @@
 				</div>
 			</div>
 		</div>
-		<div id="reportbtns">
-			<a href="#filterModal" class="blackbtn reportbtn" data-toggle="modal">View
-				Reports</a>
+<!-- 		<div id="reportbtns"> -->
+<!-- 			<a href="#filterModal" class="blackbtn reportbtn" data-toggle="modal">View -->
+<!-- 				Reports</a> -->
 		</div>
 	</div>
 	<script>

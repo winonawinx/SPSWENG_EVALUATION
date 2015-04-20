@@ -19,9 +19,9 @@
                     <div class="form-group">
                         <button type="submit" id = "vo" name = "vo" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Offices">View Offices</button>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" id = "voh" name = "voh" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Office Heads">View Office Heads</button>
-                    </div>
+<!--                     <div class="form-group"> -->
+<!--                         <button type="submit" id = "voh" name = "voh" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Office Heads">View Office Heads</button> -->
+<!--                     </div> -->
                     <div class="form-group">
                         <button type="submit" id = "vu" name = "vu" class="blackbtn abtn adminbtn" onClick = "clicked(this);" value = "Users">View Users</button>
                     </div>

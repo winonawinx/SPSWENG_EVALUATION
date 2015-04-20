@@ -129,12 +129,14 @@
 
 	
 		<div class="centerdiv">
+			<form action = "EditOfficesBackServlet" method = "post">
 			<h1 class="headerlabel">
 				Edit Offices
 				<div class="floatright headermenu">
-					<button type="submit" class="blackbtn abtn headermenubtn">Back</button>
+					<button type="submit" class="blackbtn abtn headermenubtn" id = "BackBtn" name = "BackBtn" value = "Back">Back</button>
 				</div>
 			</h1>
+			</form>
 			
 			<div class="contentdiv">
 				<div class="row">
