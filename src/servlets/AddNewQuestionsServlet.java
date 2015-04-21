@@ -36,6 +36,13 @@ public class AddNewQuestionsServlet extends HttpServlet {
 		Controller con = new Controller();
    	    ArrayList<String> questionStrings = new ArrayList<String>();
 	    int number = Integer.parseInt((String)request.getParameter("numbah"));
+	    
+	    ArrayList<String> existing = new ArrayList<String>();
+	    Iterator iterator = con.getAllQuestions();
+	    while(iterator.hasNext())
+	    {
+	    	existing.add(((Question)iterator.next()).getQuestion());
+	    }
 	    System.out.println("number " + number);
 	    String s = "";
 	    for(int x = 0; x < number; x++)
@@ -44,8 +51,12 @@ public class AddNewQuestionsServlet extends HttpServlet {
 	    
 	    	if(s != null)
 	    	{
-	    		questionStrings.add(s);
-	    	    con.addQuestion(1, questionStrings.get(x), false);
+	    		if(!existing.contains(s))
+	    		{
+		    		questionStrings.add(s);
+		    	    con.addQuestion(1, questionStrings.get(x), false);
+		    	    existing.add(s);
+	    		}
 	    	}
 	    }
 	    
