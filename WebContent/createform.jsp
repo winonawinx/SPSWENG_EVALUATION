@@ -24,6 +24,7 @@
         int qn = 0;
  
 	    Office o = (Office)session.getAttribute("Office");
+	    office = o.getName();
 	    Iterator<Question> iterator = con.getAllQuestions();
 	    ArrayList<Question> questionsList = new ArrayList<Question>();
 	    while(iterator.hasNext())

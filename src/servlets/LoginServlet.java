@@ -27,10 +27,7 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Controller m = new Controller();
-		System.out.println("UN " + request.getParameter("email"));
-		System.out.println("PW " + request.getParameter("password"));
 		User user = m.getUser(request.getParameter("email"), request.getParameter("password"));
-		
 		if(user != null)
 		{
 			response.addCookie(new Cookie("user", user.getEmail()));
