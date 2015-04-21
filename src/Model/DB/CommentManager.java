@@ -155,7 +155,7 @@ public class CommentManager {
 	{
 		try 
 		{
-			String query = "SELECT * FROM comments where controlnumberid IN (select controlnumberid from controlnumbers where formid = (SELECT formid from forms where officeId = ?) && serviceId = ? && status = 1);";
+			String query = "SELECT * FROM comments where controlnumberid IN (select controlnumberid from controlnumbers where formid = (SELECT formid from forms where officeId = ? order by formid DESC limit 1) && serviceId = ? && status = 1);";
 			statement = connect.getConnection().prepareStatement(query);
 			statement.setInt(1, officeId);
 			statement.setInt(2, serviceId);

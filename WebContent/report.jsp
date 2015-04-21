@@ -1,7 +1,9 @@
 <%@page import="Model.Service"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Controller.Controller"%>
 <%@page import="Model.Question"%>
+<%@page import="Model.Form"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Model.Office"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -26,7 +28,11 @@
                        o = m.getOffice(Integer.parseInt(cookie.getValue()));
                     }
                 }
-              	Iterator<Question> aQ = (Iterator<Question>) session.getAttribute("Questions");
+                Iterator tempForms = (Iterator) session.getAttribute("Forms");
+				ArrayList<Form> forms = new ArrayList<Form>();
+				while(tempForms.hasNext())
+					forms.add((Form) tempForms.next());
+              	Iterator<Question> aQ;
         %>
         
         <div class = "centerdiv">
@@ -65,65 +71,15 @@
                         %>
                         </tr>
                     </thead>
-                        <tbody>
-                        	<%
-                            	while(aQ.hasNext())
-                            	{
-                            		questionSize++;
-                            		Question question = aQ.next();
-                            %>
-                            <tr>
-                                <td><%=question.getQuestion() %></td>
-                                <%
-                                	services = o.getServices();
-                                	int y = 0;
-                                	while(services.hasNext())
-                                	{
-                                		Service service = (Service) services.next();
-                                		float average = m.getAVG(question.getID(), service.getID(), o.getID());
-                                		total[y] += average;
-                                		y++;
-                              	%>
-                                <td><%= average %></td>
-                                <%
-                                	}
-                            %>
-                            	
-                            </tr>
-                            	<%
-                            	}
-                                %>
-                            <tr>
-                                <td>Overall Satisfaction</td>
-                                <%
-                                	for(int y = 0; y < serviceSize; y++)
-                                	{
-                                %>
-                                <td><%= total[y] %></td>
-                                <%
-                                	}
-                            	
-                                %>
-                            </tr>
-                            <tr>
-                                <td>Average</td>
-                                <%
-                                	for(int y = 0; y < serviceSize; y++)
-                                	{
-                                %>
-                                <td><%= total[y]/questionSize %></td>
-                                <%
-                                	}
-                            	
-                                %>
-                            </tr>
+                        <tbody id="questions">
                         </tbody>
                   </table>
             </div>
             <form action = "ReportMenuServlet" method = "post">
             <div id="reportbtns">
-                <a href="#filterModal" class="blackbtn reportbtn" data-toggle="modal">Filter Results</a>
-                <button class="blackbtn reportbtn" type = "submit" id = "comments" name = "comments" value = "comments" onClick = "clicked(this);">View Comments</button>
+                <select class="form-control" style="width:220px; margin: 0px 20px; display: inline; text-decoration: none !important;" id="filterOptions" onChange="toggleOptions(this);">
+	            </select>
+	            <button class="blackbtn reportbtn" type = "submit" id = "comments" name = "comments" value = "comments" onClick = "clicked(this);">View Comments</button>
                 <a href="" class="blackbtn reportbtn">Export to Spreadsheet</a>
                 <input type = "hidden" name = "click" id = "click">
             </div>
@@ -131,11 +87,147 @@
         </div>
         
         <script>
-        	function clicked(element)
-        	{
-        		var pressedBtn = element.id;
-         		document.getElementById("click").value = document.getElementById(pressedBtn).value;
-        	}
+        var formId = 0;
+    	var start = true;
+    	var stringHTML;
+    	var total;
+   		<%
+	        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			int formSize = forms.size();
+			int id = 0;
+			for(int i = 0; i < formSize; i++)
+			{
+				Form curForm = forms.get(i);
+				String date = df.format(curForm.getStartDate()) + " - ";
+				if(df.format(curForm.getEndDate()).equals(""))
+					date = date.concat("Present");
+				else
+					date = date.concat(df.format(curForm.getEndDate()));
+		%>
+			var option = document.createElement("option");
+			option.text = "<%=date%>";
+			option.value = "<%=curForm.getID()%>";
+			document.getElementById("filterOptions").add(option);
+		<%
+			}
+		%>
+		$("#filterOptions").change();
+		
+		function clicked(element)
+		{
+			var pressedBtn = element.id;
+	 		document.getElementById("click").value = document.getElementById(pressedBtn).value;
+		}
+      	
+        function toggleOptions(element)
+    	{
+        	formId = element.value;
+    		changeReports();
+    	}
+        
+        function changeReports()
+        {
+        	stringHTML = "";
+        	var dataLength;
+        	var averageLength;
+			total = new Array(<%=serviceSize%>);
+			$("#questions").html("");
+			for(var i = 0; i < <%=serviceSize%>; i++)
+			{
+				total[i] = new Number();
+			}
+			var questions = JSON.parse('{"Questions":[{"average":[""],"question":""}]}');
+			$.ajax({
+        		type: "POST",
+				url : "ReportMenuServlet",
+				data : {"formId" : formId, "officeId" : <%= o.getID() %>, "click" : "average"},
+				method : "POST",
+				success : function(average)
+				{
+					questions = JSON.parse('{"Questions":[{"average":[],"question":""}]}');
+					questions = average;
+	           		dataLength = questions.Questions.length;
+					for(var i = 0; i < dataLength; i++)
+					{
+						stringHTML += "<tr><td>";
+		           		stringHTML += questions.Questions[i].question;
+		           		stringHTML += "</td>";
+		           		averageLength = questions.Questions[i].average.length;
+						for(var x = 0; x < averageLength; x++)
+						{
+							total[x] += questions.Questions[i].average[x];
+							stringHTML += "<td>" + parseFloat(Math.round(questions.Questions[i].average[x] * 100) / 100).toFixed(2) + "</td>";
+						}
+		                stringHTML += "</tr>";
+					}
+					
+					stringHTML += "<tr><td>Overall Satisfaction</td>";
+	               	for(var y = 0; y < averageLength; y++)
+	                {
+	                	stringHTML += "<td>";
+	   					stringHTML += parseFloat(Math.round(total[y] * 100) / 100).toFixed(2);
+	   					stringHTML += "</td>";
+	                }
+	                stringHTML += "</tr><tr><td>Average</td>";
+	                for(var y = 0; y < averageLength; y++)
+	                {
+		                	stringHTML += "<td>";
+	       					stringHTML += parseFloat(Math.round(total[y]/dataLength * 100) / 100).toFixed(2);
+	       					stringHTML += "</td>";
+	                }      
+	                stringHTML += "</tr>";
+	                $("#questions").html(stringHTML);
+	            }
+            });
+		}
+        
+        function getAVG(i, dataLength, question, questionId)
+        {
+        	$.ajax({
+        		type: "GET",
+				url : "ReportMenuServlet",
+				data : {"questionId" : questionId, "officeId" : <%= o.getID() %>, "click" : "average"},
+				method : "GET",
+				async: "false",
+				success : function(average)
+				{
+					var counter = this.ajaxcounter;
+					stringHTML += "<tr><td>";
+	           		stringHTML += question;
+	           		stringHTML += "</td>";
+	           		averageLength = average.length;
+					for(var x = 0; x < averageLength; x++)
+					{
+						total[x] += average[x];
+						stringHTML += "<td>" + parseFloat(Math.round(average[x] * 100) / 100).toFixed(2) + "</td>";
+					}
+	                stringHTML += "</tr>";
+	                alert(counter + " " + question);
+	                if(counter == dataLength-1)
+	                {
+	                	console.log(stringHTML);
+						stringHTML += "<tr><td>Overall Satisfaction</td>";
+		               	for(var y = 0; y < averageLength; y++)
+		                {
+		                	stringHTML += "<td>";
+		   					stringHTML += parseFloat(Math.round(total[y] * 100) / 100).toFixed(2);
+		   					stringHTML += "</td>";
+		                }
+		                stringHTML += "</tr><tr><td>Average</td>";
+		                for(var y = 0; y < averageLength; y++)
+		                {
+			                	stringHTML += "<td>";
+		       					stringHTML += parseFloat(Math.round(total[y]/dataLength * 100) / 100).toFixed(2);
+		       					stringHTML += "</td>";
+		                }      
+		                stringHTML += "</tr>";
+
+						console.log(stringHTML);
+		                $("#questions").html(stringHTML);
+	                }
+	            }
+            });
+        }
         </script>
     </body>
 </html>

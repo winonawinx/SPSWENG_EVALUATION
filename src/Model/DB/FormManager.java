@@ -272,4 +272,39 @@ public class FormManager
 		return false;
 	}
 	
+	public Iterator<Form> getAllFormsByOffice(int officeId)
+	{
+		try 
+		{
+			String query = "SELECT * FROM forms WHERE officeId = ? ORDER BY formId DESC";
+			statement = connect.getConnection().prepareStatement(query);
+			statement.setInt(1, officeId);
+			rs = statement.executeQuery();
+			
+			forms = new ArrayList<Form>();
+			
+			while(rs.next())
+			{
+				ArrayList<Question> questions = new ArrayList<Question>();
+				Iterator iterator = null;
+				
+				Form f = new Form(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getDate(4), rs.getBoolean(5));
+				iterator = fqm.getAllData(f.getID());
+				while(iterator.hasNext())
+				{
+					questions.add((Question)iterator.next());
+				}
+				f.setQuestions(questions);
+				forms.add(f);
+			}
+			
+		} 
+		catch (SQLException e) {
+			connect.close();
+			System.out.println("ERROR in getting all data from DB");
+			e.printStackTrace();
+		}
+		connect.close();
+		return forms.iterator();
+	}
 }

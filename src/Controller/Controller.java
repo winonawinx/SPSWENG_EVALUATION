@@ -19,6 +19,7 @@ import Model.DB.AnswerManager;
 import Model.DB.CommentManager;
 import Model.DB.ControlNumManager;
 import Model.DB.FormManager;
+import Model.DB.FormQuestionsManager;
 import Model.DB.OfficeManager;
 import Model.DB.QuestionManager;
 import Model.DB.ServiceManager;
@@ -30,10 +31,12 @@ public class Controller {
 	private OfficeManager om;
 	private AnswerManager am;
 	private FormManager fm;
+	private FormQuestionsManager fqm;
 	private ControlNumManager cm;
 	private QuestionManager qm;
 	private ServiceManager sm;
 	private CommentManager cmm;
+	private static Controller controller = null;
 	
 	public Controller()
 	{
@@ -41,6 +44,7 @@ public class Controller {
 		om = new OfficeManager();
 		am = new AnswerManager();
 		fm = new FormManager();
+		fqm = new FormQuestionsManager();
 		cm = new ControlNumManager();
 		qm = new QuestionManager();
 		sm = new ServiceManager();
@@ -49,6 +53,15 @@ public class Controller {
 		getAllData();
 	}
 	
+	public static Controller getInstance() 
+	{
+		 if (controller == null) {
+			 controller = new Controller();
+	        }
+	 
+	        return controller;
+	}
+	 
 	public Iterator<User> getAllUsers()
 	{
 		return um.getAllData();
@@ -311,5 +324,15 @@ public class Controller {
 	public void updateUser(User user)
 	{
 		um.updateData(user);
+	}
+	
+	public Iterator<Form> getAllFormsByOffice(int officeId)
+	{	
+		return fm.getAllFormsByOffice(officeId);
+	}
+	
+	public Iterator<Question> getAllQuestions(int formId)
+	{
+		return fqm.getAllData(formId);
 	}
 }

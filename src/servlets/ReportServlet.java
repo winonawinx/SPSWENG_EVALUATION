@@ -22,11 +22,11 @@ public class ReportServlet extends HttpServlet {
     
     public ReportServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		response.sendRedirect("personnellogin.jsp");
+	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +35,7 @@ public class ReportServlet extends HttpServlet {
 		request.getSession().setAttribute("Office", m.getOffice(office));
 		Cookie ofc = new Cookie("Office", String.valueOf(office));
         response.addCookie(ofc);
-		request.getSession().setAttribute("Questions", m.getOfficeQuestions(office));
+		request.getSession().setAttribute("Forms", m.getAllFormsByOffice(office));
 		response.sendRedirect("report.jsp");
 	}
 

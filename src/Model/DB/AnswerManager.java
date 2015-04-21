@@ -1,5 +1,6 @@
 package Model.DB;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -159,7 +160,6 @@ public class AnswerManager{
 		try
 		{
 			float a;
-			
 			String query = " SELECT AVG(a.answer) "
 					+ "FROM answers a LEFT JOIN controlnumbers c ON a.controlNumberID = c.controlNumberID "
 					+ "LEFT JOIN formquestions fq ON c.formId = fq.formId AND a.questionId = fq.questionId "
@@ -167,27 +167,31 @@ public class AnswerManager{
 					+ "LEFT JOIN offices o ON f.officeId = o.officeId "
 					+ "LEFT JOIN services s ON o.officeId = s.officeId AND s.serviceId = c.serviceId "
 					+ "WHERE a.questionId = ? AND s.serviceId = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, questionID);
-			statement.setInt(2,serviceID);
-			rs = statement.executeQuery();
-			
-			if (rs.next() != false)
+			Connection connection = connect.getConnection();
+			PreparedStatement pstatement = connection.prepareStatement(query);
+			pstatement.setInt(1, questionID);
+			pstatement.setInt(2,serviceID);
+			rs = pstatement.executeQuery();
+			if (rs.next())
 			{
 				a = rs.getFloat(1);
+				pstatement.close();
+				connection.close();
 				return a;
 			}
-			
-			else 
+			else
+			{
+
+				pstatement.close();
+				connection.close();
 				return 0;
+			}
 		}
 		catch (SQLException e)
 		{
 			System.out.println("Unable to get AVG");
 			e.printStackTrace();
 		}
-		
-		connect.close();
 		return 0;
 		
 	}
