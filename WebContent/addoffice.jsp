@@ -74,7 +74,7 @@ Iterator<User> heads = um.getOfficeHead();
 					<div class="clearfloat"></div>
 					<div class="form-group floatright">
 						<button type="submit" class="blackbtn formfooterbtn">Add</button>
-						<a href="editoffices.html" type="submit"
+						<a href="editoffices.jsp" type="submit"
 							class="blackbtn abtn formfooterbtn">Cancel</a>
 					</div>
 					<div class="clearfloat"></div>

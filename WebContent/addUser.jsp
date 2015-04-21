@@ -18,7 +18,7 @@
                 </div>
             </h1>
             <div id="addoffice" class="contentdiv small">
-                <form>
+                <form action = "addUserServlet" method = "post">
                     <div class="form-horizontal row" style="margin-top:40px;"> 
                         
                         <div class="form-group control-group">
@@ -44,9 +44,9 @@
                         <div class="form-group control-group">
                             <label class="col-xs-12 addlabel control-label">Type </label>
                             <select class="form-control my-select" id = "utype" name = "utypw">
-                                <option>Administrator</option>
-                                <option>Office Head</option>
-                                <option>Service Personnel</option>
+                                <option>administrator</option>
+                                <option>officehead</option>
+                                <option>service personnel</option>
                             </select>
                         </div>
                     
