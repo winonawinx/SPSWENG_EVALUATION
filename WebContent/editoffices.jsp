@@ -15,7 +15,10 @@
 <script src="js/bootstrap.min.js"></script>
 <title>Edit Offices</title>
 <script>
-
+	<%
+		Controller con = new Controller();
+		Iterator<Office> offices = con.getAllOffices();
+	%>
 	var currId;
 	var currName;
 	function showOfficeModal() {
@@ -31,7 +34,10 @@
 	
 	function editOffice() {
 		var editted = document.getElementById("ofcName").value;
-		alert(editted);
+
+		//document.getElementById('ofcName').value = editted;
+		//document.getElementById(currId).value = editted;
+		//$('#' + currId).text(editted);
 		$.ajax({
 			type: 'POST',
 			url : 'EditOfficeModalServlet',
@@ -41,9 +47,19 @@
 				alert('error');
 			},
 			success : function(data) {
-				alert('successfully editted!');
+				$('#editOfficeModal').modal('hide');
+				$('#message').text('Successfully changed office name to ' + editted);
+				$('#successModal').modal('show');
 			}
 		});
+		<%
+			offices = con.getAllOffices();
+		%>
+	}
+	
+	function reload()
+	{
+		location.reload();
 	}
 	
 	function deleteOffice() {
@@ -70,10 +86,6 @@
 </script>
 </head>
 <body>
-	<%
-		Controller con = new Controller();
-		Iterator<Office> offices = con.getAllOffices();
-	%>
 	<!-- Modal HTML -->
 	<form action="ModifyFormServlet" method="post">
 		<div id="editOfficeModal" class="modal fade my-modal">
@@ -113,11 +125,30 @@
 		</div>
 	</form>
 
-	
+	<div id="successModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Success</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2 id="message"></h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 		<div class="centerdiv">
 			<form action = "EditOfficesBackServlet" method = "post">
-			<h1 class="headerlabel">
-				Edit Offices
+			<h1 class="headerlabel">Edit Offices
 				<div class="floatright headermenu">
 					<button type="submit" class="blackbtn abtn headermenubtn" id = "BackBtn" name = "BackBtn" value = "Back">Back</button>
 				</div>

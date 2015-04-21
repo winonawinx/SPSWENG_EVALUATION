@@ -15,9 +15,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import Controller.Controller;
+import Model.Form;
 import Model.Office;
 import Model.Question;
 import Model.Service;
+import Model.User;
 
 @WebServlet("/ReportMenuServlet")
 public class ReportMenuServlet extends HttpServlet {
@@ -38,6 +40,13 @@ public class ReportMenuServlet extends HttpServlet {
 		String button = (String) request.getParameter("click");
 		if(button.equals("comments"))
 		{
+			Office o = (Office) request.getSession().getAttribute("Office");
+			request.getSession().setAttribute("Office", o);
+	        Iterator tempForms = (Iterator) request.getSession().getAttribute("Forms");
+	        request.getSession().setAttribute("Forms", tempForms);
+	        System.out.println(((Form) tempForms.next()).getID() + " lol");
+	        User user = (User) request.getSession().getAttribute("User");
+	    	request.getSession().setAttribute("User", user);
 			request.getSession().setAttribute("Services", con.getOfficeServices(((Office)request.getSession().getAttribute("Office")).getID()));
 			request.getSession().setAttribute("comments", con.getServiceComments(((Office)request.getSession().getAttribute("Office")).getID(), 1));
 			response.sendRedirect("comments.jsp");
@@ -83,7 +92,7 @@ public class ReportMenuServlet extends HttpServlet {
 				ArrayList<Float> innerAverages = new ArrayList<Float>();
 				for(Service service: services)
 				{
-					innerAverages.add(con.getAVG(questionId, service.getID(), officeId));
+					innerAverages.add(con.getAVG(questionId, formId, service.getID(), officeId));
 				}
 				averages.add(innerAverages);
 				String s = "";

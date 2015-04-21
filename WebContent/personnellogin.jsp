@@ -34,8 +34,8 @@
         </div>
         
         <% 
-    		String error = (String) session.getAttribute("Error"); 
-    		session.setAttribute("Error", null);
+    		String error = (String) session.getAttribute("Error");
+    		session.setAttribute("Error", "");
     	%>
     	
     	<script>
@@ -45,6 +45,9 @@
     		$('#errorModal').modal('show');
     	else
     		$('#errorModal').modal('hide');
+    	<%
+			session.setAttribute("Error", "");
+		%>
     	</script>
         <div class="centerlogindiv">
             <div class="centercard">

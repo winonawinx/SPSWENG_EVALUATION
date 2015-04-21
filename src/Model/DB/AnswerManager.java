@@ -1,6 +1,5 @@
 package Model.DB;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,60 +8,55 @@ import java.util.Iterator;
 
 import DBConnection.DBConnection;
 import Model.Answer;
-import Model.Question;
 
-public class AnswerManager{
-
-	private DBConnection connect;
-	private ResultSet rs;
-	private PreparedStatement statement;
+public class AnswerManager
+{
+	private DBConnection dbConnection;
+	private ResultSet resultSet;
+	private PreparedStatement preparedStatement;
 	private ArrayList<Answer> answers;
 	
-	private static AnswerManager aM = null;
+	private static AnswerManager answerManager = null;
 	
 	public static synchronized AnswerManager getInstance() 
 	{
-        if (aM == null)
-        {
-            aM = new AnswerManager();
-        }
- 
-        return aM;
+        if (answerManager == null)
+        	answerManager = new AnswerManager();
+        return answerManager;
     }
 	
 	public AnswerManager()
 	{
-		connect = DBConnection.getInstance();
+		dbConnection = DBConnection.getInstance();
 		answers = new ArrayList<Answer>();
 	}
 	
-	public Answer getData(int controlNumberid)
+	public Answer getData(int controlNumberId)
 	{
 		try
 		{
-			Answer a;
-			
-			String query = "SELECT * FROM answers WHERE controlNumberID = ?";	
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, controlNumberid);
-			rs = statement.executeQuery();
-			
-			if (rs.next())
+			Answer answer;
+			String query = "SELECT * FROM answers WHERE controlNumberId = ?";	
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, controlNumberId);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
 			{
-				a = new Answer(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getBoolean(4));
-				return a;
+				answer = new Answer(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getBoolean(4));
+				dbConnection.close();
+				return answer;
 			}
-			
-			else 
+			else
+			{
+				dbConnection.close();
 				return null;
+			}
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			System.out.println("Unable to SELECT Answer");
 			e.printStackTrace();
 		}
-		
-		connect.close();
 		return null;
 	}
 	
@@ -70,67 +64,67 @@ public class AnswerManager{
 	{	
 		try 
 		{
-			String query = "SELECT * FROM Answers";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-			
+			String query = "SELECT * FROM answers";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			answers = new ArrayList<Answer>();
-			while(rs.next())
+			while(resultSet.next())
 			{
-				Answer a = new Answer(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getBoolean(4));
-				answers.add(a);			
+				Answer answer = new Answer(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getBoolean(4));
+				answers.add(answer);	
 			}
-						
+			dbConnection.close();
 		} 
-		catch (SQLException e) {
-			System.out.println("ERROR in getting all answers from DB");
+		catch (SQLException e)
+		{
+			System.out.println("ERROR in getting all ANSWERS from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return answers.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
 	{
-		Answer a = (Answer) obj;
-		
-		String query = "UPDATE answers SET questionID = ?, controlnumberid = ?, answer = ?, isArchived = ? WHERE controlnumberid = ?";
 		try 
 		{
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, a.getQuestionID());
-			statement.setInt(2, a.getControlNumberID());
-			statement.setInt(3, a.getAnswer());
-			statement.setBoolean(4, a.getIsArchived());
-			statement.setInt(5, a.getControlNumberID());
-			statement.execute();
-			connect.close();
+			Answer answer = (Answer) obj;
+			String query = "UPDATE answers SET questionId = ?, controlNumberId = ?, answer = ?, isArchived = ? WHERE controlNumberId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, answer.getQuestionID());
+			preparedStatement.setInt(2, answer.getControlNumberID());
+			preparedStatement.setInt(3, answer.getAnswer());
+			preparedStatement.setBoolean(4, answer.getIsArchived());
+			preparedStatement.setInt(5, answer.getControlNumberID());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 			
-		} catch (SQLException x) {
-	
-			System.out.println("Update Error");
-			x.printStackTrace();
 		}
-		connect.close();
+		catch (SQLException e)
+		{
+	
+			System.out.println("Update error in ANSWERS");
+			e.printStackTrace();
+		}
 		return false;
 	}
 	
-	public boolean insertData(Object obj) {
+	public boolean insertData(Object obj)
+	{
 		try
 		{
-			Answer a = (Answer) obj;
-			String query = "INSERT INTO answers values(?,?,?,?)";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, a.getQuestionID());
-			statement.setInt(2, a.getControlNumberID());
-			if(a.getAnswer() == 0)
-				statement.setNull(3, java.sql.Types.VARCHAR);
+			Answer answer = (Answer) obj;
+			String query = "INSERT INTO answers VALUES(?,?,?,?)";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, answer.getQuestionID());
+			preparedStatement.setInt(2, answer.getControlNumberID());
+			if(answer.getAnswer() == 0)
+				preparedStatement.setNull(3, java.sql.Types.VARCHAR);
 			else
-				statement.setInt(3, a.getAnswer());
-			statement.setBoolean(4, a.getIsArchived());
-			statement.execute();
-			connect.close();
+				preparedStatement.setInt(3, answer.getAnswer());
+			preparedStatement.setBoolean(4, answer.getIsArchived());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 		}
 		catch (SQLException e)
@@ -138,7 +132,6 @@ public class AnswerManager{
 			System.out.println("Unable to INSERT new answer");
 			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
@@ -154,36 +147,33 @@ public class AnswerManager{
 	}
 	
 	
-	public float getAVG(int questionID, int serviceID, int officeID)
+	public float getAVG(int questionID, int formID, int serviceID, int officeID)
 	{
-		
 		try
 		{
-			float a;
+			float average;
 			String query = " SELECT AVG(a.answer) "
-					+ "FROM answers a LEFT JOIN controlnumbers c ON a.controlNumberID = c.controlNumberID "
+					+ "FROM answers a LEFT JOIN controlnumbers c ON a.controlNumberId = c.controlNumberId "
 					+ "LEFT JOIN formquestions fq ON c.formId = fq.formId AND a.questionId = fq.questionId "
 					+ "LEFT JOIN forms f ON fq.formId = f.formId "
 					+ "LEFT JOIN offices o ON f.officeId = o.officeId "
 					+ "LEFT JOIN services s ON o.officeId = s.officeId AND s.serviceId = c.serviceId "
-					+ "WHERE a.questionId = ? AND s.serviceId = ?";
-			Connection connection = connect.getConnection();
-			PreparedStatement pstatement = connection.prepareStatement(query);
-			pstatement.setInt(1, questionID);
-			pstatement.setInt(2,serviceID);
-			rs = pstatement.executeQuery();
-			if (rs.next())
+					+ "WHERE a.questionId = ? AND f.formId = ? AND s.serviceId = ? AND o.officeId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, questionID);
+			preparedStatement.setInt(2, formID);
+			preparedStatement.setInt(3, serviceID);
+			preparedStatement.setInt(4, officeID);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
 			{
-				a = rs.getFloat(1);
-				pstatement.close();
-				connection.close();
-				return a;
+				average = resultSet.getFloat(1);
+				dbConnection.close();
+				return average;
 			}
 			else
 			{
-
-				pstatement.close();
-				connection.close();
+				dbConnection.close();
 				return 0;
 			}
 		}
@@ -193,7 +183,5 @@ public class AnswerManager{
 			e.printStackTrace();
 		}
 		return 0;
-		
 	}
-	
 }

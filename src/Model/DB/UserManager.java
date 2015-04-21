@@ -7,188 +7,199 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import DBConnection.DBConnection;
-import Model.Question;
 import Model.User;
 
-public class UserManager {
-	private DBConnection connect;
-	private ResultSet rs;
-	private PreparedStatement statement;
+public class UserManager
+{
+	private DBConnection dbConnection;
+	private ResultSet resultSet;
+	private PreparedStatement preparedStatement;
 	private ArrayList<User> users;
 
-	private static UserManager uM = null;
+	private static UserManager userManager = null;
 
-	public static synchronized UserManager getInstance() {
-		if (uM == null) {
-			uM = new UserManager();
-		}
-
-		return uM;
+	public static synchronized UserManager getInstance()
+	{
+		if (userManager == null)
+			userManager = new UserManager();
+		return userManager;
 	}
 
-	public UserManager() {
-		connect = DBConnection.getInstance();
+	public UserManager()
+	{
+		dbConnection = DBConnection.getInstance();
 		users = new ArrayList<User>();
 	}
 
-	public User getData(String username) {
+	public User getData(String userName)
+	{
 		try {
-			User u;
-
-			String query = "SELECT * FROM Users WHERE username = ? AND isArchived = 0";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, username);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
-				u = new User(rs.getInt(1), rs.getString(2), rs.getString(3),
-						rs.getString(4), rs.getString(5), rs.getString(6),
-						rs.getBoolean(7));
-				return u;
+			User user;
+			String query = "SELECT * FROM users WHERE userName = ? AND isArchived = 0";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, userName);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
+				user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+						resultSet.getString(4), resultSet.getString(5), resultSet.getString(6),
+						resultSet.getBoolean(7));
+				dbConnection.close();
+				return user;
 			}
-
 			else
+			{
+				dbConnection.close();
 				return null;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT User");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return null;
 	}
 
-	public Iterator<User> getAllData() {
-		try {
-			String query = "SELECT * FROM Users WHERE isArchived = 0;";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-
+	public Iterator<User> getAllData()
+	{
+		try
+		{
+			String query = "SELECT * FROM users WHERE isArchived = 0;";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			users = new ArrayList<User>();
-			while (rs.next()) {
-				User u = new User(rs.getInt(1), rs.getString(2),
-						rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getBoolean(7));
+			while (resultSet.next()) {
+				User user = new User(resultSet.getInt(1), resultSet.getString(2),
+						resultSet.getString(3), resultSet.getString(4), resultSet.getString(5),
+						resultSet.getString(6), resultSet.getBoolean(7));
 
-				users.add(u);
+				users.add(user);
 			}
-
-		} catch (SQLException e) {
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all data from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return users.iterator();
 	}
 
-	public Iterator<User> getOfficeHead() {
-		ArrayList<User> heads = new ArrayList<User>();
-		try {
-			String query = "SELECT * FROM Users WHERE type='officehead';";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-			while (rs.next()) {
-				User u = new User(rs.getInt(1), rs.getString(2),
-						rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getBoolean(7));
-
-				heads.add(u);
+	public Iterator<User> getOfficeHead()
+	{
+		ArrayList<User> officeHeads = new ArrayList<User>();
+		try
+		{
+			String query = "SELECT * FROM users WHERE type='officehead';";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next())
+			{
+				User user = new User(resultSet.getInt(1), resultSet.getString(2),
+						resultSet.getString(3), resultSet.getString(4), resultSet.getString(5),
+						resultSet.getString(6), resultSet.getBoolean(7));
+				officeHeads.add(user);
 			}
-
-		} catch (SQLException e) {
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all data from DB");
 			e.printStackTrace();
 		}
-		connect.close();
-		return heads.iterator();
+		return officeHeads.iterator();
 	}
 
-	public boolean updateData(Object obj) {
-		User u = (User) obj;
-
-		String query = "UPDATE users SET userID = ?, username = ?, useremail = ?, userpassword = ?, type = ?, isArchived = ? WHERE userID = ?";
-		try {
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, u.getID());
-			statement.setString(2, u.getUsername());
-			statement.setString(3, u.getEmail());
-			statement.setString(4, u.getPassword());
-			statement.setString(5, u.getType());
-			statement.setBoolean(6, u.getIsArchived());
-			statement.setInt(7, u.getID());
-			statement.executeUpdate();
-			// notifyObserver();
-			connect.close();
+	public boolean updateData(Object obj)
+	{
+		try
+		{
+			User u = (User) obj;
+			String query = "UPDATE users SET userId = ?, userName = ?, userEmail = ?, userPassword = ?, "
+						+"type = ?, isArchived = ? WHERE userId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, u.getID());
+			preparedStatement.setString(2, u.getUsername());
+			preparedStatement.setString(3, u.getEmail());
+			preparedStatement.setString(4, u.getPassword());
+			preparedStatement.setString(5, u.getType());
+			preparedStatement.setBoolean(6, u.getIsArchived());
+			preparedStatement.setInt(7, u.getID());
+			preparedStatement.executeUpdate();
+			dbConnection.close();
 			return true;
 
-		} catch (SQLException a) {
+		}
+		catch (SQLException e)
+		{
 
 			System.out.println("Update Error");
-			a.printStackTrace();
+			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
-	public void removeUser(int userId) {
-		String query = "UPDATE users SET isArchived = ? WHERE userID = ?";
-		try {
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setBoolean(1, true);
-			statement.setInt(2, userId);
-			statement.executeUpdate();
-			// notifyObserver();
-			connect.close();
-
-		} catch (SQLException a) {
-
-			System.out.println("Delete Error");
-			a.printStackTrace();
+	public void removeUser(int userId)
+	{
+		try
+		{
+			String query = "UPDATE users SET isArchived = ? WHERE userID = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setInt(2, userId);
+			preparedStatement.executeUpdate();
+			dbConnection.close();
 		}
-		connect.close();
+		catch (SQLException e)
+		{
+			System.out.println("Delete Error");
+			e.printStackTrace();
+		}
 	}
 
-	// public boolean insertData(Object obj) {
-	public boolean insertData(String email, String username, String password,
-			String type, String title) {
-		try {
-			String query = "INSERT INTO users (userEmail, userName, userTitle, userPassword, userType, isArchived) values(?,?,?,?,'0')";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, email);
-			statement.setString(2, username);
-			statement.setString(3, title);
-			statement.setString(4, password);
-			statement.setString(5, type);
-			statement.execute();
-			connect.close();
+	public boolean insertData(String email, String username, String password, String type, String title)
+	{
+		try
+		{
+			String query = "INSERT INTO users (userEmail, userName, userTitle, userPassword, type, isArchived) VALUES(?,?,?,?,?,'0')";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, email);
+			preparedStatement.setString(2, username);
+			preparedStatement.setString(3, type);
+			preparedStatement.setString(4, password);
+			preparedStatement.setString(5, type);
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to INSERT new user");
 			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
-	public Iterator getList() {
+	public Iterator getList()
+	{
 		return users.iterator();
 	}
 
-	public void resetList() {
+	public void resetList()
+	{
 		users.clear();
 	}
 
-	public Boolean isValid(String username, String password) {
+	public boolean isValid(String username, String password)
+	{
 		getAllData();
-		for (int x = 0; x < users.size(); x++) {
-			if (username.equals(users.get(x).getUsername())) {
-				if (password.equals(users.get(x).getPassword())) {
+		for (int x = 0; x < users.size(); x++)
+			if (username.equals(users.get(x).getUsername()))
+				if (password.equals(users.get(x).getPassword()))
 					return true;
-				} else
+				else
 					return false;
-			}
-		}
-
 		return false;
 	}
 

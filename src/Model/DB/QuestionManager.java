@@ -7,61 +7,56 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import DBConnection.DBConnection;
-import Model.Form;
 import Model.Question;
 
 public class QuestionManager
 {
-	private DBConnection connect;
-	private ResultSet rs;
-	private PreparedStatement statement;
+	private DBConnection dbConnection;
+	private ResultSet resultSet;
+	private PreparedStatement preparedStatement;
 	private ArrayList<Question> questions;
 	
-	private static QuestionManager qM = null;
+	private static QuestionManager questionManager = null;
 	
 	public static synchronized QuestionManager getInstance() 
 	{
-        if (qM == null)
-        {
-            qM = new QuestionManager();
-        }
- 
-        return qM;
+        if (questionManager == null)
+            questionManager = new QuestionManager();
+        return questionManager;
     }
 	
 	public QuestionManager()
 	{
-		connect = DBConnection.getInstance();
+		dbConnection = DBConnection.getInstance();
 		questions = new ArrayList<Question>();
 	}
 	
-	public Question getData(String question)
+	public Question getData(String q)
 	{
 		try
 		{
-			Question q;
-			
-			String query = "SELECT * FROM Questions WHERE question = ?";	
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, question);
-			rs = statement.executeQuery();
-			
-			if (rs.next())
+			Question question;
+			String query = "SELECT * FROM questions WHERE question = ?";	
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, q);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
 			{
-				q = new Question(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				return q;
+				question = new Question(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				dbConnection.close();
+				return question;
 			}
-			
 			else 
+			{
+				dbConnection.close();
 				return null;
+			}
 		}
 		catch (SQLException e)
 		{
 			System.out.println("Unable to SELECT Question");
 			e.printStackTrace();
 		}
-		
-		connect.close();
 		return null;
 	}
 	
@@ -69,62 +64,60 @@ public class QuestionManager
 	{	
 		try 
 		{
-			String query = "SELECT * FROM Questions WHERE isArchived = '0'";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-			
+			String query = "SELECT * FROM questions WHERE isArchived = '0'";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			questions.clear();
-			while(rs.next())
+			while(resultSet.next())
 			{
-				Question q = new Question(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				questions.add(q);			
+				Question q = new Question(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				questions.add(q);		
 			}
-						
+			dbConnection.close();
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all data from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return questions.iterator();
 	}
 	
 	public boolean updateData(Object obj) 
 	{
-		Question q = (Question) obj;
-		
-		String query = "UPDATE questions SET question = ?, isArchived = ? WHERE QuestionID = ?";
 		try 
 		{
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, q.getQuestion());
-			statement.setBoolean(2, q.getIsArchived());
-			statement.setInt(3, q.getID());
-			statement.execute();
-			//notifyObserver();
-			connect.close();
+			Question q = (Question) obj;
+			String query = "UPDATE questions SET question = ?, isArchived = ? WHERE QuestionID = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, q.getQuestion());
+			preparedStatement.setBoolean(2, q.getIsArchived());
+			preparedStatement.setInt(3, q.getID());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 			
-		} catch (SQLException a) {
+		}
+		catch (SQLException e)
+		{
 	
 			System.out.println("Update Error");
-			a.printStackTrace();
+			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 	
-	public boolean insertData(Object obj) {
+	public boolean insertData(Object obj)
+	{
 		try
 		{
-			Question q = (Question) obj;
+			Question question = (Question) obj;
 			String query = "INSERT INTO questions values(DEFAULT,?,?)";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, q.getQuestion());
-			statement.setBoolean(2, q.getIsArchived());
-			statement.execute();
-			//notifyObserver();
-			connect.close();
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, question.getQuestion());
+			preparedStatement.setBoolean(2, question.getIsArchived());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 		}
 		catch (SQLException e)
@@ -132,7 +125,6 @@ public class QuestionManager
 			System.out.println("Unable to INSERT new question");
 			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
@@ -148,55 +140,50 @@ public class QuestionManager
 	}
 	
 	
-	public Iterator<Question> getOfficeQuestions(int officeid)
+	public Iterator<Question> getOfficeQuestions(int officeId)
 	{
-		ArrayList<Question> list = new ArrayList<Question>();
-		
+		ArrayList<Question> questionList = new ArrayList<Question>();
 		try 
 		{
-			String query = "SELECT * FROM Questions WHERE isArchived = '0' AND questionID IN (Select questionID FROM formquestions WHERE FormID IN (SELECT FormID from Forms WHERE officeID = ?))";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, officeid);
-			rs = statement.executeQuery();
-			
-
-			while(rs.next())
+			String query = "SELECT * FROM questions WHERE isArchived = '0' AND questionId "
+						+ "IN (Select questionId FROM formquestions WHERE formId IN "
+						+ "(SELECT formId from forms WHERE officeId = ?))";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, officeId);
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next())
 			{
-				Question q = new Question(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				list.add(q);			
+				Question question = new Question(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				questionList.add(question);			
 			}
-						
+			dbConnection.close();
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all office questions from DB");
 			e.printStackTrace();
 		}
-		connect.close();
-		return list.iterator();
-		
+		return questionList.iterator();
 	}
 	
 	public boolean removeData(Object obj, boolean isArchived)
 	{
-		Question q = (Question) obj;
-		
-		String query = "UPDATE questions SET isArchived = ? WHERE QuestionID = ?";
 		try 
 		{
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setBoolean(1, isArchived);
-			statement.setInt(2, q.getID());
-			statement.execute();
-			//notifyObserver();
-			connect.close();
+			Question question = (Question) obj;
+			String query = "UPDATE questions SET isArchived = ? WHERE questionId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setBoolean(1, isArchived);
+			preparedStatement.setInt(2, question.getID());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
-			
-		} catch (SQLException a) {
-	
-			System.out.println("Update Error");
-			a.printStackTrace();
 		}
-		connect.close();
+		catch (SQLException e)
+		{
+			System.out.println("Update Error");
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

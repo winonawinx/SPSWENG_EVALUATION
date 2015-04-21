@@ -7,86 +7,81 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import DBConnection.DBConnection;
-import Model.Answer;
 import Model.Comment;
 
-public class CommentManager {
+public class CommentManager
+{
 
-	private DBConnection connect;
-	private ResultSet rs;
-	private PreparedStatement statement;
+	private DBConnection dbConnection;
+	private ResultSet resultSet;
+	private PreparedStatement preparedStatement;
 	private ArrayList<Comment> comments;
 	
-	private static CommentManager cM = null;
+	private static CommentManager commentManager = null;
 	
 	public static synchronized CommentManager getInstance() 
 	{
-        if (cM == null)
-        {
-            cM = new CommentManager();
-        }
- 
-        return cM;
+        if (commentManager == null)
+            commentManager = new CommentManager();
+        return commentManager;
     }
 	
 	public CommentManager()
 	{
-		connect = DBConnection.getInstance();
+		dbConnection = DBConnection.getInstance();
 		comments = new ArrayList<Comment>();
 	}
 	
-	public Comment getData(int controlNumberid)
+	public Comment getData(int controlNumberId)
 	{
 		try
 		{
-			Comment c;
-			
-			String query = "SELECT * FROM comments WHERE controlNumberID = ?";	
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, controlNumberid);
-			rs = statement.executeQuery();
-			
-			if (rs.next())
+			Comment comment;
+			String query = "SELECT * FROM comments WHERE controlNumberId = ?";	
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, controlNumberId);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
 			{
-				c = new Comment(rs.getInt(1), rs.getString(2));
-				return c;
+				comment = new Comment(resultSet.getInt(1), resultSet.getString(2));
+				dbConnection.close();
+				return comment;
 			}
 			
 			else 
+			{
+				dbConnection.close();
 				return null;
+			}
 		}
 		catch (SQLException e)
 		{
 			System.out.println("Unable to SELECT Comment");
 			e.printStackTrace();
 		}
-		
-		connect.close();
 		return null;
 	}
 	
 	public Iterator<Comment> getAllData() 
 	{	
-		
 		try 
 		{
 			String query = "SELECT * FROM comments";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-			
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			comments = new ArrayList<Comment>();
-			while(rs.next())
+			while(resultSet.next())
 			{
-				Comment c = new Comment(rs.getInt(1), rs.getString(2));
-				comments.add(c);			
+				Comment comment = new Comment(resultSet.getInt(1), resultSet.getString(2));
+				comments.add(comment);			
 			}
-						
+			dbConnection.close();	
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all answers from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return comments.iterator();
 	}
 	
@@ -95,16 +90,17 @@ public class CommentManager {
 		return false;
 	}
 	
-	public boolean insertData(Object obj) {
+	public boolean insertData(Object obj)
+	{
 		try
 		{
-			Comment c = (Comment) obj;
-			String query = "INSERT INTO comments values(?,?)";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, c.getControlnumberid());
-			statement.setString(2, c.getComment());
-			statement.execute();
-			connect.close();
+			Comment comment = (Comment) obj;
+			String query = "INSERT INTO comments VALUES(?,?)";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, comment.getControlnumberid());
+			preparedStatement.setString(2, comment.getComment());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 		}
 		catch (SQLException e)
@@ -112,7 +108,6 @@ public class CommentManager {
 			System.out.println("Unable to INSERT new answer");
 			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
@@ -127,27 +122,26 @@ public class CommentManager {
 		comments = new ArrayList<Comment>();
 	}
 	
-	public Iterator<Comment> getControlComments(int controlNumberid)
+	public Iterator<Comment> getControlComments(int controlNumberId)
 	{
 		try 
 		{
-			String query = "SELECT * FROM comments where controlnumberid = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-			
+			String query = "SELECT * FROM comments WHERE controlNmberId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			comments = new ArrayList<Comment>();
-			while(rs.next())
+			while(resultSet.next())
 			{
-				Comment c = new Comment(rs.getInt(1), rs.getString(2));
-				comments.add(c);			
+				Comment comment = new Comment(resultSet.getInt(1), resultSet.getString(2));
+				comments.add(comment);			
 			}
-						
+			dbConnection.close();
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all comments from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return comments.iterator();
 	}
 	
@@ -155,27 +149,26 @@ public class CommentManager {
 	{
 		try 
 		{
-			String query = "SELECT * FROM comments where controlnumberid IN (select controlnumberid from controlnumbers where formid = (SELECT formid from forms where officeId = ? order by formid DESC limit 1) && serviceId = ? && status = 1);";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, officeId);
-			statement.setInt(2, serviceId);
-			rs = statement.executeQuery();
-			
+			String query = "SELECT * FROM comments WHERE controlNumberId IN (SELECT controlNumberId FROM controlnumbers "
+						+ "WHERE formId = (SELECT formid FROM forms WHERE officeId = ? ORDER BY formId DESC LIMIT 1) && "
+						+ "serviceId = ? && status = 1);";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, officeId);
+			preparedStatement.setInt(2, serviceId);
+			resultSet = preparedStatement.executeQuery();
 			comments = new ArrayList<Comment>();
-			while(rs.next())
+			while(resultSet.next())
 			{
-				Comment c = new Comment(rs.getInt(1), rs.getString(2));
-				comments.add(c);			
+				Comment comment = new Comment(resultSet.getInt(1), resultSet.getString(2));
+				comments.add(comment);			
 			}
-						
+			dbConnection.close();	
 		} 
-		catch (SQLException e) {
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all comments from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return comments.iterator();
 	}
-	
-	
 }

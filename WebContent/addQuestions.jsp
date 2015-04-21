@@ -52,7 +52,7 @@
                             <button class="floatright deletequestionbtn" onClick="deleteQuestion(0);"><img src="css/images/x-mark.png" height="20" width="20"></button>
                         </div>
                     </li>
-                </ol>        
+                </ol>
 		        <input type = "hidden" name = "numbah" id = "numbah">
 		        <div class="clearfloat"></div>
                 <div class="form-group">
@@ -61,17 +61,17 @@
                     </div>
                 </div>
                 <div class="row form-group" style="padding-left:40px">
+                </div>
                 <div align="right">
                     <button type = "submit" class="blackbtn abtn" style ="font-size: 25px;" data-toggle="modal" onClick = "saveNum();">Save</button>
                     <a href="adminmenu.jsp" class="blackbtn abtn" style ="font-size: 25px;">Cancel</a>
                 </div>
-            </div>
         </div>
         </form>
      </div>
 
 	<script type = "text/javascript">
-	var number = 0;
+	var number = 1;
 	$(document).ready(function()
       		{
       			$("#addquestionbtn").click(function()
@@ -101,6 +101,7 @@
     function deleteQuestion(question)
     {
         $("#"+question).remove();
+        number--;
     	document.getElementById("numbah").value = number;
     }
     

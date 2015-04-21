@@ -38,7 +38,6 @@ public class AddUserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		Controller m = new Controller();
-		
 		m.addUser((String)request.getParameter("uemail"), (String)request.getParameter("uname"), (String)request.getParameter("upw"), (String)request.getParameter("utype"), null);
 		response.sendRedirect("adminmenu.jsp");
 	}

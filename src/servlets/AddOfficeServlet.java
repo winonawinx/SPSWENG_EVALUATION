@@ -28,9 +28,10 @@ public class AddOfficeServlet extends HttpServlet {
 		OfficeManager om = new OfficeManager();
 		int userId = Integer.valueOf((String)request.getParameter("heads"));
 		String officeName = (String) request.getParameter("officeName");
-		int officeId = om.addOffice(officeName);
-		om.setOfficeHead(userId, officeId);
-		request.getSession().setAttribute("Office", con.getOffice(officeId));
+		//int officeId = om.addOffice(officeName);
+		//om.setOfficeHead(userId, officeId);
+		//request.getSession().setAttribute("Office", con.getOffice(officeId));
+		request.getSession().setAttribute("Office", con.getOffice(9));
 		response.sendRedirect("createform.jsp");
 	}
 

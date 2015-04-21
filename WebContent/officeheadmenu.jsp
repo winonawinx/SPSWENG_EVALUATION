@@ -1,5 +1,6 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.Office"%>
+<%@page import="Model.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -16,6 +17,8 @@
     
     <%
     	Iterator<Office> offices = (Iterator<Office>) session.getAttribute("Offices");
+    	User user = (User) session.getAttribute("User");
+    	request.getSession().setAttribute("User", user);
     %>
     
     <body>

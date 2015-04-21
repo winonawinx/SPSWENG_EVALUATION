@@ -59,7 +59,7 @@ public class generateControlNumServlet extends HttpServlet {
 		} 
 		else
 		{
-			out.println("Form " + serviceId + " does not exist!");
+			out.println("Form " + officeId + " does not exist!");
 		}
 	}
 

@@ -9,370 +9,411 @@ import java.util.Iterator;
 
 import DBConnection.DBConnection;
 import Model.Office;
-import Model.Question;
 import Model.Service;
 
-public class OfficeManager {
-
-	private DBConnection connect;
-	private ResultSet rs;
-	private PreparedStatement statement;
+public class OfficeManager
+{
+	private DBConnection dbConnection;
+	private ResultSet resultSet;
+	private PreparedStatement preparedStatement;
 	private ArrayList<Office> offices;
-	private ServiceManager sm;
+	private ServiceManager serviceManager;
 
-	private static OfficeManager oM = null;
+	private static OfficeManager officeManager = null;
 
-	public static synchronized OfficeManager getInstance() {
-		if (oM == null) {
-			oM = new OfficeManager();
-		}
-
-		return oM;
+	public static synchronized OfficeManager getInstance()
+	{
+		if (officeManager == null)
+			officeManager = new OfficeManager();
+		return officeManager;
 	}
 
-	public OfficeManager() {
-		connect = DBConnection.getInstance();
+	public OfficeManager()
+	{
+		dbConnection = DBConnection.getInstance();
 		offices = new ArrayList<Office>();
-		sm = new ServiceManager();
+		serviceManager = new ServiceManager();
 	}
 
-	public void getServices(Office office) {
-		try {
-			String sql = "SELECT * " + "FROM services "
-					+ "WHERE isArchived = 0 AND officeId = " + office.getID();
-			statement = connect.getConnection().prepareStatement(sql);
-
-			rs = statement.executeQuery("SELECT * " + "FROM services "
-					+ "WHERE isArchived = 0 AND officeId = " + office.getID());
-
-			while (rs.next()) {
-				Service service = new Service(rs.getInt(1), rs.getString(2),
-						rs.getInt(3), rs.getBoolean(4));
+	public void getServices(Office office)
+	{
+		try
+		{
+			String query = "SELECT * FROM services WHERE isArchived = 0 AND officeId = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, office.getID());
+			resultSet = preparedStatement.executeQuery(query);
+			while (resultSet.next())
+			{
+				Service service = new Service(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getBoolean(4));
 				office.addService(service);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("error in getServices");
 		}
 	}
 	
-	public void editOffice(int officeId, String officeName) {
-		try {
+	public void editOffice(int officeId, String officeName)
+	{
+		try
+		{
 			String query = "UPDATE offices SET officeName = ? WHERE officeId = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, officeName);
-			statement.setInt(2, officeId);
-			statement.executeUpdate();
-		} catch (SQLException e) {
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, officeName);
+			preparedStatement.setInt(2, officeId);
+			preparedStatement.executeUpdate();
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to editOffice");
 			e.printStackTrace();
 		}
-		connect.close();
-
 	}
 	
-	public void deleteOffice(int officeId) {
-		try {
+	public void deleteOffice(int officeId)
+	{
+		try
+		{
 			String query = "UPDATE offices SET isArchived = '1' WHERE officeId = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, officeId);
-			statement.executeUpdate();
-		} catch (SQLException e) {
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, officeId);
+			preparedStatement.executeUpdate();
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to deleteOffice");
 			e.printStackTrace();
 		}
-		connect.close();
 
 	}
 
-	public Office getData(int ID) {
-		try {
-			Office o;
-
-			String query = "SELECT * FROM Offices WHERE officeID = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, ID);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
+	public Office getData(int officeId)
+	{
+		try 
+		{
+			Office office;
+			String query = "SELECT * FROM offices WHERE officeID = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, officeId);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				iterator = sm.getAllData(ID);
-				while (iterator.hasNext()) {
+				office = new Office(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				iterator = serviceManager.getAllData(officeId);
+				while (iterator.hasNext())
+				{
 					services.add((Service) iterator.next());
 				}
-				o.setServices(services);
-				return o;
+				office.setServices(services);
+				dbConnection.close();
+				return office;
 			}
-
 			else
+			{
+				dbConnection.close();
 				return null;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT Office");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return null;
 	}
 
-	public Office getOffice(String Name) {
-		try {
-			Office o;
-
-			String query = "SELECT * FROM Offices WHERE officeName = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, Name);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
+	public Office getOffice(String officeName)
+	{
+		try
+		{
+			Office office;
+			String query = "SELECT * FROM offices WHERE officeName = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, officeName);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				iterator = sm.getAllData(o.getID());
-				while (iterator.hasNext()) {
+				office = new Office(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				iterator = serviceManager.getAllData(office.getID());
+				while (iterator.hasNext())
+				{
 					services.add((Service) iterator.next());
 				}
-				o.setServices(services);
-				return o;
+				office.setServices(services);
+				dbConnection.close();
+				return office;
 			}
-
 			else
+			{
+				dbConnection.close();
 				return null;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT Office");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return null;
 	}
 
-	public Office getDataByName(String ID) {
+	public Office getDataByName(String officeName)
+	{
 		try {
-			Office o;
-
-			String query = "SELECT * FROM Offices WHERE officeName = ?";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, ID);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
+			Office office;
+			String query = "SELECT * FROM offices WHERE officeName = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, officeName);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				o = new Office(rs.getInt(1), rs.getString(2), rs.getBoolean(3));
-				iterator = sm.getAllData(ID);
-				while (iterator.hasNext()) {
+				office = new Office(resultSet.getInt(1), resultSet.getString(2), resultSet.getBoolean(3));
+				iterator = serviceManager.getAllData(officeName);
+				while (iterator.hasNext())
+				{
 					services.add((Service) iterator.next());
 				}
-				o.setServices(services);
-				return o;
+				office.setServices(services);
+				dbConnection.close();
+				return office;
 			}
-
 			else
+			{
+				dbConnection.close();
 				return null;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT Office");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return null;
 	}
 
-	public Iterator<Office> getAllData() {
-		try {
-			String query = "SELECT * FROM Offices where isArchived = '0'";
-			statement = connect.getConnection().prepareStatement(query);
-			rs = statement.executeQuery();
-
+	public Iterator<Office> getAllData()
+	{
+		try
+		{
+			String query = "SELECT * FROM offices where isArchived = '0'";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			offices = new ArrayList<Office>();
-			while (rs.next()) {
+			while (resultSet.next())
+			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				Office o = new Office(rs.getInt(1), rs.getString(2),
-						rs.getBoolean(3));
-				iterator = sm.getAllData(o.getID());
-				while (iterator.hasNext()) {
+				Office office = new Office(resultSet.getInt(1), resultSet.getString(2),
+						resultSet.getBoolean(3));
+				iterator = serviceManager.getAllData(office.getID());
+				while (iterator.hasNext())
+				{
 					services.add((Service) iterator.next());
 				}
-				o.setServices(services);
-				offices.add(o);
+				office.setServices(services);
+				offices.add(office);
 			}
-
-		} catch (SQLException e) {
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all data from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return offices.iterator();
 	}
 
-	public boolean updateData(Object obj) {
-		Office o = (Office) obj;
-
-		String query = "UPDATE offices SET officeID = ?, officename = ?, isArchived = ? WHERE officeName = ?";
-		try {
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, o.getID());
-			statement.setString(2, o.getName());
-			statement.setBoolean(3, o.getIsArchived());
-			statement.setString(4, o.getName());
-			statement.execute();
-			connect.close();
+	public boolean updateData(Object obj)
+	{
+		try
+		{
+			Office office = (Office) obj;
+			String query = "UPDATE offices SET officeId = ?, officeName = ?, isArchived = ? WHERE officeName = ?";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, office.getID());
+			preparedStatement.setString(2, office.getName());
+			preparedStatement.setBoolean(3, office.getIsArchived());
+			preparedStatement.setString(4, office.getName());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
 
-		} catch (SQLException a) {
-
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Update Error");
-			a.printStackTrace();
+			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
-	public boolean insertData(Object obj) {
-		try {
-			Office o = (Office) obj;
-			String query = "INSERT INTO offices values(?,?,?)";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, o.getID());
-			statement.setString(2, o.getName());
-			statement.setBoolean(3, o.getIsArchived());
-			statement.execute();
-			connect.close();
+	public boolean insertData(Object obj)
+	{
+		try
+		{
+			Office office = (Office) obj;
+			String query = "INSERT INTO offices VALUES(?,?,?)";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, office.getID());
+			preparedStatement.setString(2, office.getName());
+			preparedStatement.setBoolean(3, office.getIsArchived());
+			preparedStatement.execute();
+			dbConnection.close();
 			return true;
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to INSERT new office");
 			e.printStackTrace();
 		}
-		connect.close();
 		return false;
 	}
 
-	public int addOffice(String officeName) {
+	public int addOffice(String officeName)
+	{
 		int id = 0;
-		try {
-			String query = "INSERT INTO offices (officeName) values(?)";
-			statement = connect.getConnection().prepareStatement(query,
-					Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, officeName);
-			statement.executeUpdate();
-			rs = statement.getGeneratedKeys();
-
-			if (rs.next()) {
-				id = rs.getInt(1);
-			}
-
-		} catch (SQLException e) {
+		try
+		{
+			String query = "INSERT INTO offices (officeName) VALUES(?)";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+			preparedStatement.setString(1, officeName);
+			preparedStatement.executeUpdate();
+			resultSet = preparedStatement.getGeneratedKeys();
+			if (resultSet.next())
+				id = resultSet.getInt(1);
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to INSERT new office");
 			e.printStackTrace();
 		}
-		connect.close();
-		System.out.println(id);
 		return id;
 	}
 
-	public void setOfficeHead(int userId, int officeId) {
-		try {
-			String query = "INSERT INTO officeheads (userId, officeId) values(?, ?)";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, userId);
-			statement.setInt(2, officeId);
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
+	public void setOfficeHead(int userId, int officeId)
+	{
+		try
+		{
+			String query = "INSERT INTO officeheads (userId, officeId) VALUES(?, ?)";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setInt(2, officeId);
+			preparedStatement.executeUpdate();
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to INSERT new office");
 			e.printStackTrace();
 		}
-		connect.close();
 	}
 
-	public ArrayList<Office> getList() {
+	public ArrayList<Office> getList()
+	{
 		return offices;
 	}
 
-	public void resetList() {
+	public void resetList()
+	{
 		offices.clear();
 	}
 
-	public int getIDbyHead(int headID) {
-		try {
-			Office o;
-
-			String query = "SELECT officeID FROM Offices WHERE officehead = ?;";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, headID);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
-				return rs.getInt(1);
+	public int getIDbyHead(int headID)
+	{
+		try
+		{
+			String query = "SELECT officeId FROM offices WHERE officeHead = ?;";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, headID);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
+				dbConnection.close();
+				return resultSet.getInt(1);
 			}
-
 			else
+			{
+				dbConnection.close();
 				return 0;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT Office");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return 0;
 	}
 
-	public int getOfficeID(String office) {
-		try {
-			System.out.println("Office selected in OfficeManager == " + office);
-			Office o;
-
-			String query = "SELECT officeID FROM Offices WHERE officeName = ?;";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setString(1, office);
-			rs = statement.executeQuery();
-
-			if (rs.next()) {
-				return rs.getInt(1) + 1;
+	public int getOfficeID(String office)
+	{
+		try
+		{
+			String query = "SELECT officeId FROM offices WHERE officeName = ?;";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, office);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
+				dbConnection.close();
+				return resultSet.getInt(1) + 1;
 			}
-
 			else
+			{
+				dbConnection.close();
 				return 0;
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Unable to SELECT Office");
 			e.printStackTrace();
 		}
-
-		connect.close();
 		return 0;
 	}
 
-	public Iterator<Office> getOfficesByHead(int userID) {
+	public Iterator<Office> getOfficesByHead(int userID)
+	{
 		try {
-			String query = "SELECT * FROM Offices WHERE officeID IN (SELECT officeID FROM officeheads WHERE userID = ? AND isArchived = '0') and isArchived = '0'";
-			statement = connect.getConnection().prepareStatement(query);
-			statement.setInt(1, userID);
-			rs = statement.executeQuery();
-
+			String query = "SELECT * FROM offices WHERE officeId IN (SELECT officeId FROM officeheads "
+						+ "WHERE userId = ? AND isArchived = '0') and isArchived = '0'";
+			preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			resultSet = preparedStatement.executeQuery();
 			offices = new ArrayList<Office>();
-			while (rs.next()) {
+			while (resultSet.next())
+			{
 				ArrayList<Service> services = new ArrayList<Service>();
 				Iterator iterator = null;
-				Office o = new Office(rs.getInt(1), rs.getString(2),
-						rs.getBoolean(3));
-				iterator = sm.getAllData(o.getID());
-				while (iterator.hasNext()) {
+				Office o = new Office(resultSet.getInt(1), resultSet.getString(2),
+						resultSet.getBoolean(3));
+				iterator = serviceManager.getAllData(o.getID());
+				while (iterator.hasNext())
+				{
 					services.add((Service) iterator.next());
 				}
 				o.setServices(services);
 				offices.add(o);
 			}
-
-		} catch (SQLException e) {
+			dbConnection.close();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("ERROR in getting all data from DB");
 			e.printStackTrace();
 		}
-		connect.close();
 		return offices.iterator();
 	}
-
 }

@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
+import Model.Form;
+import Model.Office;
 
 @WebServlet("/BackToReportServlet")
 public class BackToReportServlet extends HttpServlet {
@@ -26,13 +29,18 @@ public class BackToReportServlet extends HttpServlet {
 	{
 		Controller m = new Controller();
 		int office = -1;
-    	Cookie[] cookies = request.getCookies();
+		Office o = null;
+		Cookie[] cookies = request.getCookies();
        	for(Cookie cookie:cookies){
            	if(cookie.getName().equals("Office")){
               	office = Integer.parseInt((cookie.getValue()));
+              	o = m.getOffice(office);
            	}
        	}
-		request.getSession().setAttribute("Questions", m.getOfficeQuestions(office));
+       	o = (Office) request.getSession().getAttribute("Office");
+       	request.getSession().setAttribute("Office", o);
+       	Iterator tempForms = (Iterator) request.getSession().getAttribute("Forms");
+        request.getSession().setAttribute("Forms", tempForms);
 		response.sendRedirect("report.jsp");
 	}
 

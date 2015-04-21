@@ -58,6 +58,27 @@
             </div>
         </div>
         
+        <div id="successModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Success</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2 id="message"></h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal" onclick="reload();">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="centerdiv">
             <h1 class="headerlabel">View Users
                 <div class="floatright headermenu">
@@ -73,7 +94,7 @@
                 		User user = (User) iterator.next();
                 	%>
                     <div class="col-xs-4">
-                        <button type="submit" class="blackbtn viewabtn view" onclick="press('<%= user.getID()%>', '<%=user.getTitle()%>', '<%=user.getEmail()%>', '<%=user.getUsername()%>');"><%= user.getUsername() %></button>
+                        <button type="submit" class="blackbtn viewabtn view" onclick="press('<%= user.getID()%>', '<%=user.getTitle()%>', '<%=user.getEmail()%>', '<%=user.getUsername()%>', '<%=user.getPassword()%>');"><%= user.getUsername() %></button>
                     </div>
                     
                     <%}%>
@@ -92,10 +113,13 @@
     	var currId;
     	var currTitle;
     	var currEmail;
+    	var currPass;
     	function save() {
     		var edittedPW = document.getElementById('modalpassword').value;
     		var edittedUN = document.getElementById('modalusername').value;
     		var edittedType = document.getElementById('modaltype').value;
+    		if(edittedPW == "")
+    			edittedPW = currPass;
     		$.ajax({
     			type: 'POST',
     			url : 'editUsersServlet',
@@ -109,10 +133,16 @@
     				alert('error');
     			},
     			success : function(data) {
-    				alert('successfully editted!');
-    				location.reload();
+    				$('#editUserModal').modal('hide');
+    				$('#message').text('Successfully edited user!');
+    				$('#successModal').modal('show');
     			}
     		});
+    	}
+    	
+    	function reload()
+    	{
+			location.reload();
     	}
     	function removeUser() {
     		$.ajax({
@@ -149,12 +179,13 @@
     		$('#editUserModal').modal('show');
     		return false;
     	}
-    	function press(userId, userTitle, userEmail, userName)
+    	function press(userId, userTitle, userEmail, userName, userPass)
      	{
     			
 				currId = userId;
 				currTitle = userTitle;
-				currEmail = userEmail
+				currEmail = userEmail;
+				currPass = userPass;
 				document.getElementById('modalusername').value = userName;
      	}
      	

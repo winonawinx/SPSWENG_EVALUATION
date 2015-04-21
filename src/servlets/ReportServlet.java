@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controller.Controller;
-import Model.Office;
+import Model.User;
 
 /**
  * Servlet implementation class ReportServlet
@@ -26,12 +26,14 @@ public class ReportServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		response.sendRedirect("personnellogin.jsp");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Controller m = new Controller();
 		office = Integer.parseInt((String) request.getParameter("answer"));
+		System.out.println(request.getSession().getAttribute("User"));
+		request.getSession().setAttribute("User", (User) request.getSession().getAttribute("User"));
 		request.getSession().setAttribute("Office", m.getOffice(office));
 		Cookie ofc = new Cookie("Office", String.valueOf(office));
         response.addCookie(ofc);

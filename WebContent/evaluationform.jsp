@@ -16,7 +16,7 @@
         
         <%
         String OfficeService = (String)session.getAttribute("OfficeService");
-        Form f = (Form)session.getAttribute("Form");
+        Form f = (Form) session.getAttribute("Form");
         session.setAttribute("Form", f);
         String cn = (String)session.getAttribute("Control");
         session.setAttribute("Control", cn);
@@ -133,7 +133,6 @@
         		$('#confirmationModal').modal("hide");
         		if(this.retValue)
         		{
-                    alert("Thank you for evaluating! Have a nice day.");
                     var button = document.getElementById("evalSubmit").ownerDocument.createElement('input');
                     button.style.display = 'none';
                     button.type = 'submit';

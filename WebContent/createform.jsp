@@ -24,16 +24,38 @@
         int qn = 0;
  
 	    Office o = (Office)session.getAttribute("Office");
-	    office = o.getName();
 	    Iterator<Question> iterator = con.getAllQuestions();
 	    ArrayList<Question> questionsList = new ArrayList<Question>();
+	    int questionSize = 0;
 	    while(iterator.hasNext())
 	    {
+	    	questionSize++;
 	    	questionsList.add((Question)iterator.next());
 	    }
-	    
+	    office = o.getName();
 	    session.setAttribute("Office", o);
         %>
+        
+        <div id="errorModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Error</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2 id="message"></h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Modal HTML -->
         <div id="confirmationModal" class="modal fade my-modal">
@@ -61,7 +83,29 @@
                 </div>
             </div>
         </div>
-              
+        
+        <div id="successModal" class="modal fade my-modal">
+            <div class="modal-dialog my-modal-dialog">
+                <div class="modal-content my-modal-content">
+                    <div class="modal-header my-modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Success</h2>
+                    </div>
+                    <div class="modal-body my-modal-body">
+                        <div class="form-group control-group">
+                            <h2>Success in making evaluation form!</h2>
+                            <h2>for <%=office %>!</h2>
+                        </div>
+                        <div class="form-group clearfloat"></div>
+                        <div class="floatright">
+                            <button type="button" class="blackbtn" data-dismiss="modal" onclick="success();">Okay</button>  
+                        </div>
+                        <div class="clearfloat"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
           <div class="centerdiv">
             <form action = "CreateFormServlet" method = "post" id = "modifyQues" onSubmit = "return checkVal();">
             <h1 class="headerlabel">Edit Evaluation Form for <%=office %></h1>
@@ -86,18 +130,6 @@
                         <button type="button" id="addquestionbtn" class="blackbtn">+</button>
                     </div>
                     <div class="clearfloat"></div>
-                    <div class="checkbox" style="margin-left:45px;">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <label class="checkbox-label"><input type="checkbox" id = "commentscb" name = "commentscb">Comments</label>
-                                <input type = "hidden" name = "checkedComments" id = "checkedComments" value = "false">
-                            </div>
-                            <div class="col-xs-6">
-                                <label class="checkbox-label"><input type="checkbox" id = "enddatecb" name = "enddatecb" onclick = "toggleCheckedEndDate(this);">End Date</label>
-                                <input type = "hidden" name = "checkedEndDate" id = "checkedEndDate" value = "false">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row form-group" style="padding-left:40px">
                     <div class="col-xs-6">
@@ -114,16 +146,31 @@
                     <a href="editoffices.jsp" class="blackbtn abtn" style ="font-size: 25px;">Cancel</a>
                 </div>
             </div>
-            </form>form>
+            </form>
         </div>
 
 	<script type = "text/javascript">
-	var number = 0;
+	var number = 1;
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;
+	var yyyy = today.getFullYear();
+	if(dd<10)
+	    dd='0'+dd
+
+	if(mm<10)
+	    mm='0'+mm
+
+	today = yyyy + "-" + mm + "-" + dd;
+	
 	$(document).ready(function()
       		{
       			$("#addquestionbtn").click(function()
       			{
-      				$.ajax({
+      				if(number < <%=questionSize%>)
+      				{
+      					$.ajax(
+      					{
   							type: "POST",
   							url: "AddQuestionServlet",
   							data: {"number": number,},
@@ -134,10 +181,10 @@
   							success: function(data){
   								$("#questionlist").append(data);
   							}
-  							
-      				  });
-					number++;
-      		    	document.getElementById("numbah").value = number;
+  						});
+						number++;
+	      		    	document.getElementById("numbah").value = number;
+      				}
       			});          
       		});  
     function saveNum()
@@ -148,6 +195,7 @@
     function deleteQuestion(question)
     {
         $("#"+question).remove();
+        number--;
     	document.getElementById("numbah").value = number;
     }
     
@@ -156,9 +204,53 @@
 	{
 		return this.retValue;
 	}
+    
+    function startDateValid()
+    {
+    	if(document.getElementById("startdate").value >= today)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    function endDateValid()
+    {
+    	if(document.getElementById("enddate").value == "" || (document.getElementById("enddate").value >= today 
+    			&& document.getElementById("enddate").value >= document.getElementById("startdate").value))
+    		return true;
+    	else
+    		return false;
+    }
+    
+    function questionsDuplicate()
+    {
+    	for(var i = 0; i < number; i++)
+    		for(var j = i+1; j < number; j++)
+    		if($("#q"+i+" option:selected").text() == $("#q"+j+" option:selected").text())
+    			return true;
+    	return false;
+    }
     function checkVal()
 	{
-		if(!checkConfirm())
+    	if(!startDateValid())
+        {
+    		$("#message").text("Please select a valid start date");
+    		$('#errorModal').modal('show');
+			return false;
+        }
+    	else if(!endDateValid())
+    	{
+    		$("#message").text("Please select a valid end date");
+    		$('#errorModal').modal('show');
+			return false;
+    	}
+    	else if(questionsDuplicate())
+    	{
+    		$("#message").text("Please do not duplicate questions");
+    		$('#errorModal').modal('show');
+			return false;
+    	}
+    	else if(!checkConfirm())
 		{
 			$('#confirmationModal').modal('show');
 			return false;
@@ -172,15 +264,18 @@
 		$('#confirmationModal').modal("hide");
 		if(this.retValue)
 		{
-            alert("Your changes have been saved.");
-            var button = document.getElementById("modifyQues").ownerDocument.createElement('input');
-            button.style.display = 'none';
-            button.type = 'submit';
-            document.getElementById("modifyQues").appendChild(button).click();
-            document.getElementById("modifyQues").removeChild(button);
+            $('#successModal').modal("show");
 		}
 	}
 
+    function success()
+    {
+    	var button = document.getElementById("modifyQues").ownerDocument.createElement('input');
+        button.style.display = 'none';
+        button.type = 'submit';
+        document.getElementById("modifyQues").appendChild(button).click();
+        document.getElementById("modifyQues").removeChild(button);
+    }
 	
 	</script>
 

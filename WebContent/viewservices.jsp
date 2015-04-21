@@ -67,7 +67,7 @@
                     </div>
                     <%} %>
                     <div class="col-xs-4">
-                        <a href="addservice.html" type="button" class="blackbtn viewabtn view"> + Add Service </a>
+                        <a href="addservice.jsp" type="button" class="blackbtn viewabtn view"> + Add Service </a>
                     </div>
                 </div>
                 

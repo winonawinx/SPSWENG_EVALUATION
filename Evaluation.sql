@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `evaluation` /*!40100 DEFAULT CHARACTER SET utf8 
 USE `evaluation`;
 -- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: evaluation
+-- Host: 127.0.0.1    Database: evaluation
 -- ------------------------------------------------------
--- Server version	5.7.5-m15-log
+-- Server version	5.6.23-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,6 +42,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+INSERT INTO `answers` VALUES (1,10,'3',0),(2,10,NULL,0),(3,10,'3',0),(4,10,NULL,0),(5,10,'3',0),(1,12,NULL,0),(3,12,NULL,0),(6,12,NULL,0),(1,11,'3',0),(2,11,NULL,0),(3,11,'3',0),(1,13,'3',0),(2,13,'3',0),(3,13,'3',0),(4,13,'3',0),(5,13,'3',0),(1,14,'2',0),(2,14,'2',0),(3,14,'2',0),(4,14,'2',0),(5,14,'2',0),(1,15,NULL,0),(2,15,'3',0),(3,15,NULL,0),(4,15,'3',0),(5,15,NULL,0),(1,18,'3',0),(2,18,'2',0),(3,18,'3',0),(4,18,'2',0),(5,18,'3',0),(1,19,'2',0),(2,19,'2',0),(3,19,'1',0),(4,19,NULL,0),(5,19,NULL,0);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,6 +67,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (10,'Lol Cyber Pedro'),(12,'The pain of #11'),(11,'Wew'),(13,'Awesome'),(14,'Yes'),(15,'Yep'),(18,'');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +90,7 @@ CREATE TABLE `controlnumbers` (
   KEY `controlNumberServiceId_idx` (`serviceId`),
   CONSTRAINT `controlNumberServiceId` FOREIGN KEY (`serviceId`) REFERENCES `services` (`serviceId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `controlNumbersFormId` FOREIGN KEY (`formId`) REFERENCES `forms` (`formId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +99,7 @@ CREATE TABLE `controlnumbers` (
 
 LOCK TABLES `controlnumbers` WRITE;
 /*!40000 ALTER TABLE `controlnumbers` DISABLE KEYS */;
+INSERT INTO `controlnumbers` VALUES (10,'0136771012',1,1,'2015-04-10 16:54:41.000000',1),(11,'1687779690',2,16,'2015-04-10 18:02:16.000000',1),(12,'2269718134',3,22,'2015-04-10 18:02:48.000000',1),(13,'0389046815',1,3,'2015-04-10 18:08:10.000000',1),(14,'0321526513',1,3,'2015-04-10 18:14:57.000000',1),(15,'0302912885',1,3,'2015-04-10 18:17:01.000000',1),(16,'0174080997',1,1,'2015-04-19 16:05:55.000000',1),(17,'0144960524',1,1,'2015-04-21 12:43:01.000000',0),(18,'0412646693',1,4,'2015-04-21 14:43:46.000000',1),(19,'0454445063',1,4,'2015-04-21 14:56:04.000000',1);
 /*!40000 ALTER TABLE `controlnumbers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +127,7 @@ CREATE TABLE `formquestions` (
 
 LOCK TABLES `formquestions` WRITE;
 /*!40000 ALTER TABLE `formquestions` DISABLE KEYS */;
-INSERT INTO `formquestions` VALUES (1,1,0),(1,2,0),(1,3,0),(1,4,0),(1,5,0),(2,1,0),(2,2,0),(2,3,0),(3,1,0),(3,3,0),(3,6,0);
+INSERT INTO `formquestions` VALUES (1,1,0),(1,2,0),(1,3,0),(1,4,0),(1,5,0),(2,1,0),(2,2,0),(2,3,0),(3,1,0),(3,3,0),(3,6,0),(3,1,0),(3,2,0);
 /*!40000 ALTER TABLE `formquestions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,20 +161,46 @@ INSERT INTO `forms` VALUES (1,5,'2015-03-29','2016-03-29',0),(2,6,'2015-04-02','
 UNLOCK TABLES;
 
 --
+-- Table structure for table `officeheads`
+--
+
+DROP TABLE IF EXISTS `officeheads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `officeheads` (
+  `userId` int(11) NOT NULL,
+  `officeId` int(11) NOT NULL,
+  `isArchived` tinyint(1) NOT NULL DEFAULT '0',
+  KEY `officeheadsUserId_idx` (`userId`),
+  KEY `officeheadsOfficeId_idx` (`officeId`),
+  CONSTRAINT `officeheadsOfficeId` FOREIGN KEY (`officeId`) REFERENCES `offices` (`officeId`),
+  CONSTRAINT `officeheadsUserId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `officeheads`
+--
+
+LOCK TABLES `officeheads` WRITE;
+/*!40000 ALTER TABLE `officeheads` DISABLE KEYS */;
+INSERT INTO `officeheads` VALUES (3,5,0),(3,6,0),(3,7,0);
+/*!40000 ALTER TABLE `officeheads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `offices`
 --
 
 DROP TABLE IF EXISTS `offices`;
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `offices` (
   `officeId` int(11) NOT NULL AUTO_INCREMENT,
-  `officeName` varchar(45) NOT NULL,
+  `officeName` varchar(200) NOT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`officeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,15 +209,7 @@ CREATE TABLE `offices` (
 
 LOCK TABLES `offices` WRITE;
 /*!40000 ALTER TABLE `offices` DISABLE KEYS */;
-INSERT INTO `offices` VALUES (1,'Building and Grounds Maintenance Office',0),
-(2,'Civil and Sanitary Works Office',0),
-(3,'Mechanical and Electrical Works Office',0),
-(4,'Facilities Management Office (STC)',0),
-(5,'Enrolment Services Hub',0),
-(6,'Office of Admissions and Scholarships',0),
-(7,'Office of the University Registrar',0),
-(8,'Office of the Academic Services for Integrate',0),
-(9,'Enrolment Services for STC',0);
+INSERT INTO `offices` VALUES (1,'Building and Grounds Maintenance Office',0),(2,'Civil and Sanitary Works Office',0),(3,'Mechanical and Electrical Works Office',0),(4,'Facilities Management Office (STC)',0),(5,'Enrolment Services Hub',0),(6,'Office of Admissions and Scholarships',0),(7,'Office of the University Registrar',0),(8,'Office of the Academic Services for Integrate',0),(9,'Enrolment Services for STC',0);
 /*!40000 ALTER TABLE `offices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +282,7 @@ CREATE TABLE `users` (
   `type` varchar(45) NOT NULL,
   `isArchived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,42 +291,9 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'winona','administrator','winonaerive@yahoo.com','tay123','administrator',0),(2,'jake','service personnel','jake@yahoo.com','123qwe','service personnel',0),(3,'johan','officehead','johantan@yahoo.com','asdf1234','officehead',0);
+INSERT INTO `users` VALUES (1,'Winona Erive','administrator','winonaerive@yahoo.com','tay123','administrator',0),(2,'Jake Seo','service personnel','jake@yahoo.com','123qwe','service personnel',0),(3,'Kai Fernandez','officehead','kai_fernandez@dlsu.edu.ph','kaifernandez','officehead',0),(4,'Juan Dela Cruz','service personnel','juan_dela_cruz@dlsu.edu.ph','juandelacruz','service personnel',0),(5,'Ken Hosoya','officehead','ken@ken.com','ken','officehead',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `officeheads`
---
-
-DROP TABLE IF EXISTS `officeheads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `officeheads` (
-  `userId` int(11) NOT NULL,
-  `officeId` int(11) NOT NULL,
-  `isArchived` tinyint(1) NOT NULL DEFAULT '0',
-  KEY `officeheadsUserId_idx` (`userId`),
-  KEY `officeheadsOfficeId_idx` (`officeId`),
-  CONSTRAINT `officeheadsUserId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
-  CONSTRAINT `officeheadsOfficeId` FOREIGN KEY (`officeId`) REFERENCES `offices` (`officeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `formquestions`
---
-
-LOCK TABLES `officeheads` WRITE;
-/*!40000 ALTER TABLE `officeheads` DISABLE KEYS */;
-INSERT INTO `officeheads` VALUES (3, 5, 0), (3,6, 0) ,(3,7, 0);
-/*!40000 ALTER TABLE `officeheads` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
---
--- Dumping routines for database 'evaluation'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -316,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-04 20:28:28
+-- Dump completed on 2015-04-21 18:48:32

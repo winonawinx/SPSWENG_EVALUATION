@@ -6,6 +6,7 @@
 <%@page import="Model.Form"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Model.Office"%>
+<%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -26,9 +27,13 @@
                 for(Cookie cookie:cookies){
                     if(cookie.getName().equals("Office")){
                        o = m.getOffice(Integer.parseInt(cookie.getValue()));
+                       request.getSession().setAttribute("Office", o);
                     }
                 }
                 Iterator tempForms = (Iterator) session.getAttribute("Forms");
+                request.getSession().setAttribute("Forms", tempForms);
+                User user = (User) session.getAttribute("User");
+            	request.getSession().setAttribute("User", user);
 				ArrayList<Form> forms = new ArrayList<Form>();
 				while(tempForms.hasNext())
 					forms.add((Form) tempForms.next());
@@ -99,7 +104,7 @@
 			{
 				Form curForm = forms.get(i);
 				String date = df.format(curForm.getStartDate()) + " - ";
-				if(df.format(curForm.getEndDate()).equals(""))
+				if(curForm.getEndDate() == null)
 					date = date.concat("Present");
 				else
 					date = date.concat(df.format(curForm.getEndDate()));

@@ -30,7 +30,6 @@ public class InitServlet extends HttpServlet {
 		String cn = request.getParameter("controlnumber");
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		
 		if(m.ControlNumberIsValid(cn))
 		{
 			request.getSession().setAttribute("OfficeService", m.getFormOfficeAndService(m.getControlNumberID(cn), m.getForm(m.getControlNumberFormID(cn)).getID()));

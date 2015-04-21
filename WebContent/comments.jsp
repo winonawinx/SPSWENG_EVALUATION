@@ -3,6 +3,8 @@
 <%@page import="Model.Service"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="Model.Office"%>
+<%@page import="Model.User"%>
+<%@page import="Model.Form"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -24,25 +26,31 @@
 <body>
 	<%
 		Controller m = new Controller();
-		      	Office office = null;
-	        	Cookie[] cookies = request.getCookies();
-		       	for(Cookie cookie:cookies){
-		           	if(cookie.getName().equals("Office")){
-		              	office = m.getOffice(Integer.parseInt(cookie.getValue()));
-		           	}
-		       	}
-	        	Iterator services = m.getOfficeServices(office.getID());
-	        	session.setAttribute("Services", services);
+		Office office = null;
+	    Cookie[] cookies = request.getCookies();
+		for(Cookie cookie:cookies){
+			if(cookie.getName().equals("Office")){
+				office = m.getOffice(Integer.parseInt(cookie.getValue()));
+				request.getSession().setAttribute("Office", office);
+			}
+		}
+		office = (Office) session.getAttribute("Office");
+		request.getSession().setAttribute("Office", office);
+		Iterator tempForms = (Iterator) session.getAttribute("Forms");
+		request.getSession().setAttribute("Forms", tempForms);
+	    Iterator services = m.getOfficeServices(office.getID());
+        User user = (User) session.getAttribute("User");
+    	request.getSession().setAttribute("User", user);
+	    request.getSession().setAttribute("Services", services);
 	%>
 	<div class="centerdiv">
-		<h1 class="headerlabel">
-			View Comments
-			<form action = "BackToReportServlet" method = "post">
+		<form action = "BackToReportServlet" method = "post">
+			<h1 class="headerlabel">View Comments
 			<div class="floatright headermenu">
 				<button type = "submit" class="blackbtn abtn headermenubtn">Back</button>
 			</div>
+			</h1>
 			</form>
-		</h1>
 		<div class="actualcontent">
 			<div class="row">
 					<div id="serviceslistdiv" class="col-xs-3">
@@ -53,9 +61,9 @@
 							    	Service service = (Service)services.next();
 							%>
 								<li>
-									<button name="<%=service.getID()%>"
+									 <a href="" name="<%=service.getID()%>"
 										id="<%=service.getID()%>" value="<%=service.getID()%>"
-										onClick="clicked(this);"><%=service.getName()%></button>
+										onClick="clicked(this); return false;"><%=service.getName()%></a>
 								</li>
 							<%
 								}
